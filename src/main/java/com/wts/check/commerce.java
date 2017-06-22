@@ -61,7 +61,7 @@ public class commerce {
             JSONArray jsStrs2 = JSONArray.fromObject(res.substring(res.indexOf("init('true','true','[") + 20, res.indexOf("]');</script>") + 1));
 
         }
-//        if (checkJson(jsStrs)||)
+////        if (checkJson(jsStrs)||)
         return "";
     }
 }
