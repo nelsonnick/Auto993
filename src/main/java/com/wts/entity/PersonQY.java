@@ -1,6 +1,6 @@
 package com.wts.entity;
 
-
+// 企业吸纳
 public class PersonQY {
   private String dwmc;// 单位名称
   private String qyrdbh;// 企业认定编号

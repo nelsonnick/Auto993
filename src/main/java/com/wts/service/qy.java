@@ -223,14 +223,14 @@ public class qy {
   /**
    * 生成补贴
    */
-  public static String creatMoney(CloseableHttpClient client, String gmsfhm, String grbh, String djlsh, String qsny, String zzny) throws Exception {
+  public static String creatMoney(CloseableHttpClient client, String gmsfhm, String grbh, String djlsh, String qsny, String zzny, String syys) throws Exception {
     String grxm = "";
     URI u = new URIBuilder()
             .setScheme("http")
             .setHost("10.153.50.108:7001")
             .setPath("/lemis3/lemis3MeritStation.do")
             .setParameter("method", "createBonusAddForSinglePer")
-            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s grbh=\"" + grbh + "\" msg=\"\" grxm=\"" + grxm + "\" gmsfhm=\"" + gmsfhm + "\" djlsh=\"" + djlsh + "\" btrylb=\"01\" syys=\"57\" qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" /><d k=\"dw_ylbt\"></d></p>")
+            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s grbh=\"" + grbh + "\" msg=\"\" grxm=\"" + grxm + "\" gmsfhm=\"" + gmsfhm + "\" djlsh=\"" + djlsh + "\" btrylb=\"01\" syys=\""+syys+"\" qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" /><d k=\"dw_ylbt\"></d></p>")
             .setParameter("_jbjgqxfw", "undefined")
             .setParameter("_sbjbjg", "undefined")
             .setParameter("_dwqxfw", "undefined")
@@ -239,7 +239,11 @@ public class qy {
     CloseableHttpResponse response = client.execute(post);
     HttpEntity entity = response.getEntity();
     String res = EntityUtils.toString(entity, "UTF-8");
-    if (res.indexOf("月的补贴已录入") > 0) {
+    if (res.indexOf("月的补贴已录入") > 0
+            || res.indexOf("补贴享受起始年月早于审批日期，请检查！") > 0
+            || res.indexOf("人员【"+qsny+"】到【"+zzny+"】的补贴预算，请检查！") > 0
+            || res.indexOf("的资金报表已经上报，不允许维护补贴，请检查！") > 0
+            ) {
       return "[]";
     } else {
       String start = "init('true','true','[";
@@ -319,7 +323,7 @@ public class qy {
     if (syys.equals("0")) {
       return "剩余补贴月数为零！";
     }
-    String creat = creatMoney(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), month, month);
+    String creat = creatMoney(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), month, month,syys);
     if (creat.equals("[]")) {
       return month + "的补贴已录入";
     }
@@ -367,7 +371,7 @@ public class qy {
       return "剩余补贴月数为零！";
     }
     //System.out.println(syys);
-    String creat = creatMoney(client, gmsfhm, grbh, djlsh, month, month);
+    String creat = creatMoney(client, gmsfhm, grbh, djlsh, month, month,syys);
     if (creat.equals("[]")) {
       return month + "的补贴已录入";
     }
