@@ -6,17 +6,35 @@ public class PersonQY {
   private String qyrdbh;// 企业认定编号
   private String dwbh;// 单位编号
   private String djlsh;//登记流水号
-  private String wtgyy;//
+  private String wtgyy;//未通过原因
   private String knrybh;//困难人员编号
   private String tcrq;//退出日期
-  private String spzt;//审批状态
+  private String spzt;//审批状态 03已通过
   private String cjjg;//创建机构
   private String cjrq;//创建日期
   private String gmsfhm;//公民身份号码
-  private String xb;//性别
+  private String grxm;//个人姓名
+  private String xb;//性别 1男2女
+  private String csrq;//出生日期
   private String cjr;//创建人
-  private String sfyba;//
+  private String sfyba;//是否已备案 0未备案1已备案
   private String grbh;//个人编号
+
+  public String getCsrq() {
+    return csrq;
+  }
+
+  public void setCsrq(String csrq) {
+    this.csrq = csrq;
+  }
+
+  public String getGrxm() {
+    return grxm;
+  }
+
+  public void setGrxm(String grxm) {
+    this.grxm = grxm;
+  }
 
   public String getDwmc() {
     return dwmc;
