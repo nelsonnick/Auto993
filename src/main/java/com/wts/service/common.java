@@ -349,15 +349,15 @@ public class common {
     }
 
     /**
-     * 获取个人编号
+     * 获取数据信息--->点击搜索后弹出的那个对话框信息
      * @param client 登陆后的client
      * @param paraValue 搜索参数
      * @param type 1企业吸纳2灵活就业3公益岗位4困难人员
-     * @return 第一个人员的grbh字符串 企业吸纳和灵活就业的个人编号似乎不一样，需要进一步确认
+     * @return 第一个人员的json字符串 企业吸纳和灵活就业的个人编号grbh似乎不一样，需要进一步确认
      */
-    public static String getGrbh(CloseableHttpClient client, Integer type,String paraValue) throws Exception {
+    public static JSONObject getDataInfo(CloseableHttpClient client, Integer type,String paraValue) throws Exception {
         String method,containerName,_xmlString;
-        String grbh = "";
+        JSONObject dataInfo = null;
         switch (type) {
             case 1:  // 企业吸纳
                 method = "queryBonusPersonInfo";
@@ -380,7 +380,7 @@ public class common {
                 _xmlString="<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s paraValue=\""+paraValue+"\"/></p>";
                 break;
             default:
-                return grbh;
+                return dataInfo;
         }
 
         URI u = new URIBuilder()
@@ -403,24 +403,24 @@ public class common {
         if (res.contains(start) && res.contains(end)) {
             JSONArray jsStrs = JSONArray.fromObject(res.substring(res.indexOf(start) + 20, res.indexOf(end) + 1));
             if (jsStrs.size() > 0) {
-                JSONObject jsStr = jsStrs.getJSONObject(0);
-                grbh = jsStr.getString("grbh");
+                dataInfo = jsStrs.getJSONObject(0);
             }
         }
-        return grbh;
+        return dataInfo;
     }
 
     /**
-     * 获取登记流水号
+     * 获取数据详情--->完成搜索后在原窗体出现的信息
      * @param client 登陆后的client
      * @param type 1企业吸纳2灵活就业3公益岗位
      * @param gmsfhm 公民身份号码
      * @param grbh 个人编号
      * @param datawindow 窗体的tableMark值
-     * @return 第一个人员的djlsh字符串
+     * @return 第一个人员的json字符串
      */
-    public static String getDjlsh(CloseableHttpClient client, Integer type,String gmsfhm, String grbh, String datawindow) throws Exception {
-        String grxm="",djlsh = "";
+    public static JSONObject getDataDetail(CloseableHttpClient client, Integer type,String gmsfhm, String grbh, String datawindow) throws Exception {
+        String grxm="";
+        JSONObject dataDetail = null;
         String path,method,_xmlString;
         switch (type) {
             case 1:  // 企业吸纳
@@ -439,7 +439,7 @@ public class common {
                 _xmlString="";
                 break;
             default:
-                return djlsh;
+                return dataDetail;
         }
 
         URI u = new URIBuilder()
@@ -462,11 +462,10 @@ public class common {
         if (res.contains(start) && res.contains(end)) {
             JSONArray jsStrs = JSONArray.fromObject(res.substring(res.indexOf(start) + 20, res.indexOf(end) + 1));
             if (jsStrs.size() > 0) {
-                JSONObject jsStr = jsStrs.getJSONObject(0);
-                djlsh = jsStr.getString("djlsh");
+                dataDetail = jsStrs.getJSONObject(0);
             }
         }
-        return djlsh;
+        return dataDetail;
     }
 
 }

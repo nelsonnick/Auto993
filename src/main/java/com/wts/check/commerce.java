@@ -16,15 +16,16 @@ import static com.wts.service.common.login;
 
 public class commerce {
   /**
-   * 判断是否存在注销日期或吊销日期
-   * 存在返回true
+   * 根据是否存在注销日期或吊销日期判断是否有工商信息
+   * @param jsStrs Json字符串
+   * @return  存在返回true
    */
   public static Boolean checkJson(JSONArray jsStrs) {
     Boolean result = false;
     if (jsStrs.size() > 0) {
       for (int k = 0; k < jsStrs.size(); k++) {
         JSONObject jsStr = jsStrs.getJSONObject(k);
-        if (!jsStr.getString("zxrq").equals("") || !jsStr.getString("dxrq").equals("")) {
+        if (jsStr.getString("zxrq").equals("") || jsStr.getString("dxrq").equals("")) {
           result = true;
           break;
         }
