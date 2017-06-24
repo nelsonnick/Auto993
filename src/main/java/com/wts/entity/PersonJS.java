@@ -6,7 +6,7 @@ public class PersonJS {
     private String jsgmsfhm;//家属公民身份号码
     private String bz;//备注
     private String hzgx;//户主关系
-    private String hzgrxm;//户主姓名
+    private String hzgrxm;//户主个人姓名
     private String hzgmsfhm;//户主公民身份号码
     private String jslxdh;//家属联系电话
     private String jsjkzk;//家属健康状况

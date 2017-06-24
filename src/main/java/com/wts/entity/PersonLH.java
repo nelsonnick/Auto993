@@ -4,7 +4,7 @@ package com.wts.entity;
 public class PersonLH {
   private String whcd;//文化程度
   private String cjrmc;//创建人名称
-  private String sqmc;//所属社区
+  private String sqmc;//社区名称
   private String djlsh;//登记流水号
   private String yanglaobt;//养老补贴
   private String wtgyy;//未通过原因
