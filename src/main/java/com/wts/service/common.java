@@ -1,6 +1,5 @@
 package com.wts.service;
 
-import com.wts.entity.JG;
 import com.wts.util.util;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

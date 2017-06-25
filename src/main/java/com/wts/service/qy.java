@@ -9,8 +9,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dom4j.Element;
 
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,7 @@ import static com.wts.check.commerce.getCommerce;
 import static com.wts.check.security.getDWMC;
 import static com.wts.check.security.getSecurity;
 import static com.wts.service.common.*;
+import static com.wts.util.Import.ImportQY;
 
 public class qy {
 
@@ -89,6 +94,82 @@ public class qy {
     }
 
     /**
+     * 检查补贴录入情况
+     *
+     * @param client   登陆后的client
+     * @param personQY PersonQY的实例
+     * @param month    要检查的月份
+     * @return 提示字符串
+     */
+    public static String check(CloseableHttpClient client, PersonQY personQY, String month) throws Exception {
+        if (getCommerce(personQY.getGmsfhm()) || getCommerce(personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
+            return "无法录入：存在未注销的工商信息！";
+        }
+        Element element = getSecurity(personQY.getGmsfhm(), month);
+        if (!personQY.getDwmc().equals(getDWMC(element))) {
+            return "无法录入：单位名称不一致！";
+        }
+        String syys = getSyys(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh());
+        if (syys.equals("0")) {
+            return "无法录入：剩余补贴月数为零！";
+        }
+        String creat = creatSubsidy(client, 1, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), month, month, syys);
+        if (creat.equals("[]")) {
+            return "无法录入：" + month + "的补贴已录入";
+        }
+        return personQY.getGmsfhm() + personQY.getGrxm() + "--" + month + "补贴未录入";
+    }
+
+    /**
+     * 检查补贴录入情况
+     *
+     * @param client 登陆后的client
+     * @param grxm   个人姓名
+     * @param gmsfhm 公民身份号码
+     * @param month  要检查的月份
+     * @return 提示字符串
+     */
+    public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
+
+        if (getCommerce(gmsfhm) || getCommerce(gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+            return "无法录入：存在未注销的工商信息！";
+        }
+        String datawindow = getTableMark(client, 1);
+        if (datawindow.equals("")) {
+            return "无法录入：无法打开窗口！";
+        }
+        //System.out.println(datawindow);
+        String grbh = getDataInfo(client, 1, gmsfhm).getString("grbh");
+        if (grbh.equals("")) {
+            return "无法录入：无法获取个人编号！";
+        }
+        //System.out.println(grbh);
+        JSONObject jsonObject = getDataDetail(client, 1, gmsfhm, grbh, datawindow);
+        String djlsh = jsonObject.getString("djlsh");
+        if (djlsh.equals("")) {
+            return "无法录入：无法获取登记流水号！";
+        }
+        //System.out.println(djlsh);
+        String dwmc = jsonObject.getString("dwmc");
+        Element element = getSecurity(gmsfhm, month);
+        if (!dwmc.equals(getDWMC(element))) {
+            return "无法录入：单位名称不一致！";
+        }
+        //System.out.println(dwmc);
+        String syys = getSyys(client, gmsfhm, grbh, djlsh);
+        if (syys.equals("0")) {
+            return "无法录入：剩余补贴月数为零！";
+        }
+        //System.out.println(syys);
+        String creat = creatSubsidy(client, 1, gmsfhm, grbh, djlsh, month, month, syys);
+        if (creat.equals("[]")) {
+            return "无法录入：" + month + "的补贴已录入";
+        }
+
+        return gmsfhm + grxm + "--" + month + "补贴未录入";
+    }
+
+    /**
      * 保存
      *
      * @param client   登陆后的client
@@ -96,11 +177,11 @@ public class qy {
      * @param month    要保存的月份
      * @return 提示字符串
      */
-    public static String goSave(CloseableHttpClient client, PersonQY personQY, String month) throws Exception {
+    public static String save(CloseableHttpClient client, PersonQY personQY, String month) throws Exception {
         if (getCommerce(personQY.getGmsfhm()) || getCommerce(personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
             return "存在未注销的工商信息！";
         }
-        Element element = getSecurity(personQY.getGmsfhm(),month);
+        Element element = getSecurity(personQY.getGmsfhm(), month);
         if (!personQY.getDwmc().equals(getDWMC(element))) {
             return "单位名称不一致！";
         }
@@ -140,7 +221,7 @@ public class qy {
      * @param month  要保存的月份
      * @return 提示字符串
      */
-    public static String goSave(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
+    public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
 
         if (getCommerce(gmsfhm) || getCommerce(gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
             return "存在未注销的工商信息！";
@@ -162,7 +243,7 @@ public class qy {
         }
         //System.out.println(djlsh);
         String dwmc = jsonObject.getString("dwmc");
-        Element element = getSecurity(gmsfhm,month);
+        Element element = getSecurity(gmsfhm, month);
         if (!dwmc.equals(getDWMC(element))) {
             return "单位名称不一致！";
         }
@@ -195,4 +276,27 @@ public class qy {
         return gmsfhm + grxm + "--" + month + "补贴已保存";
     }
 
+    public static void main(String[] args) throws Exception {
+        String month="";
+        CloseableHttpClient client=login("", "");
+        List<PersonQY> persons = ImportQY("企业");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("sheet1");
+        XSSFRow row = sheet.createRow(0);
+        row.createCell(0).setCellValue("公民身份号码");
+        row.createCell(1).setCellValue("个人姓名");
+        row.createCell(2).setCellValue("结果");
+        for (PersonQY person : persons) {
+            int total = sheet.getLastRowNum();
+            for (int i = 1; i < total + 1; i++) {
+                XSSFRow rowNew = sheet.createRow(i);
+                rowNew.createCell(0).setCellValue(person.getGmsfhm());
+                rowNew.createCell(1).setCellValue(person.getGrxm());
+                rowNew.createCell(1).setCellValue(save(client,person.getGmsfhm(),person.getGrxm(),month));
+            }
+        }
+        FileOutputStream os = new FileOutputStream("c:\\" + "录入结果" + ".xlsx");
+        workbook.write(os);
+        os.close();
+    }
 }

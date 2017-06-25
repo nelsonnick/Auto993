@@ -57,7 +57,6 @@ public class Export {
         FileOutputStream os = new FileOutputStream("c:\\" + "企业吸纳人员信息" + ".xlsx");
         workbook.write(os);
         os.close();
-
     }
 
     public static void ExportLH(List<PersonLH> PersonLHs) throws Exception{
