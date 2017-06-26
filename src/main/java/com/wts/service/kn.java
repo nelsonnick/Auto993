@@ -139,8 +139,6 @@ public class kn {
                 }
             }
         }
-
-
         return PersonJSs;
     }
 }

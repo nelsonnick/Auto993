@@ -27,13 +27,13 @@ public class Import {
         return Persons;
     }
 
-    public static List<PersonLH> ImportLH(String result) throws Exception {
-        List<PersonLH> Persons = null;
+    public static List<PersonGG> ImportGG(String result) throws Exception {
+        List<PersonGG> Persons = null;
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream("c:\\" + result + ".xlsx"));
         XSSFSheet sheet = workbook.getSheetAt(0);
         int total = sheet.getLastRowNum();
         for (int i = 1; i < total + 1; i++) {
-            PersonLH person = new PersonLH();
+            PersonGG person = new PersonGG();
             person.setGmsfhm(sheet.getRow(i).getCell(0).getStringCellValue());
             person.setGrxm(sheet.getRow(i).getCell(1).getStringCellValue());
             Persons.add(person);
@@ -42,13 +42,13 @@ public class Import {
         return Persons;
     }
 
-    public static List<PersonGG> ImportGG(String result) throws Exception {
-        List<PersonGG> Persons = null;
+    public static List<PersonLH> ImportLH(String result) throws Exception {
+        List<PersonLH> Persons = null;
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream("c:\\" + result + ".xlsx"));
         XSSFSheet sheet = workbook.getSheetAt(0);
         int total = sheet.getLastRowNum();
         for (int i = 1; i < total + 1; i++) {
-            PersonGG person = new PersonGG();
+            PersonLH person = new PersonLH();
             person.setGmsfhm(sheet.getRow(i).getCell(0).getStringCellValue());
             person.setGrxm(sheet.getRow(i).getCell(1).getStringCellValue());
             Persons.add(person);

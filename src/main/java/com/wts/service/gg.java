@@ -263,6 +263,7 @@ public class gg {
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
     }
+    System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴已保存");
     return personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴已保存";
   }
 
@@ -327,6 +328,7 @@ public class gg {
     if (!save.equals("保存成功！")) {
       return save;
     }
+    System.out.println(gmsfhm + grxm + "--" + month + "补贴已保存");
     return gmsfhm + grxm + "--" + month + "补贴已保存";
   }
 
