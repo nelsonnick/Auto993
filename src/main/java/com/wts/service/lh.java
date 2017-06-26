@@ -3,6 +3,7 @@ package com.wts.service;
 
 import com.wts.entity.JG;
 import com.wts.entity.PersonLH;
+import com.wts.entity.PersonQY;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
@@ -11,22 +12,31 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dom4j.Element;
 
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wts.service.common.getDataAll;
-import static com.wts.service.common.getDataTotal;
-import static com.wts.service.common.getTableMark;
+import static com.wts.check.commerce.getCommerce;
+import static com.wts.check.security.getDWMC;
+import static com.wts.check.security.getSecurity;
+import static com.wts.service.common.*;
+import static com.wts.service.common.creatSubsidy;
+import static com.wts.util.Import.ImportLH;
+import static com.wts.util.Import.ImportQY;
 
 public class lh {
 
   /**
    * 获取机构信息
    */
-  public static JG getJG(CloseableHttpClient client) throws Exception {
-    JG jg=null;
+  public static List<JG> getJG(CloseableHttpClient client) throws Exception {
+    List<JG> jgs = null;
     URI u = new URIBuilder()
             .setScheme("http")
             .setHost("10.153.50.108:7001")
@@ -45,30 +55,33 @@ public class lh {
     String start = "init('true','true','[";
     String end = "]');</script>";
     if (res.contains(start) && res.contains(end)) {
-      JSONArray jsStrs = JSONArray.fromObject(res.substring(res.indexOf(start) + 20, res.indexOf(end)+1));
-      if (jsStrs.size() > 0) {
-        JSONObject jsStr = jsStrs.getJSONObject(0);
+      JSONArray jsStrs = JSONArray.fromObject(res.substring(res.indexOf(start) + 20, res.indexOf(end) + 1));
+      for (int i = 0; i < jsStrs.size(); i++) {
+        JSONObject jsStr = jsStrs.getJSONObject(i);
+        JG jg =new JG();
         jg.setJbjgbh(jsStr.getString("jbjgbh"));
         jg.setJgbh(jsStr.getString("jgbh"));
         jg.setJgmc(jsStr.getString("jgmc"));
+        jgs.add(jg);
       }
     }
-    return jg;
+    return jgs;
   }
 
   /**
    * 获取全部灵活人员
+   *
    * @param client 登陆后的client
    * @return
    */
   public static List<PersonLH> goPersonLHs(CloseableHttpClient client) throws Exception {
     List<PersonLH> goPersonLHs = new ArrayList<PersonLH>();
-    String datawindow = getTableMark(client,2);
+    String datawindow = getTableMark(client, 3);
     if (datawindow.equals("")) {
       return goPersonLHs;
     }
-    JG jg= getJG(client);
-    Integer total = Integer.parseInt(getDataTotal(client,datawindow, 2,jg.getJbjgbh(),jg.getJgbh(),jg.getJgmc()));
+    JG jg = getJG(client).get(0);
+    Integer total = Integer.parseInt(getDataTotal(client, datawindow, 3, jg.getJbjgbh(), jg.getJgbh(), jg.getJgmc()));
     String mergePerson = getDataAll(client, datawindow, total);
     JSONArray jsStrs = JSONArray.fromObject(mergePerson);
     if (jsStrs.size() > 0) {
@@ -104,8 +117,203 @@ public class lh {
     return goPersonLHs;
   }
 
+  /**
+   * 保存补贴
+   *
+   * @param client      登陆后的client
+   * @param gmsfhm      公民身份号码
+   * @param grbh        个人编号
+   * @param djlsh       登记流水号
+   * @param qsny        起始年月
+   * @param zzny        终止年月
+   * @param syys        剩余月数
+   * @param yanglaobz   养老补助
+   * @param yiliaobz    医疗补助
+   * @param sfyxyq      是否有效XX
+   * @param sfyxffylbt  是否有效发放养老补贴
+   * @param sfyxffyilbt 是否有效发放医疗补贴
+   * @return
+   */
+  public static String saveSubsidy(CloseableHttpClient client, String gmsfhm, String grbh, String djlsh, String qsny, String zzny, String syys, String yanglaobz, String yiliaobz, String sfyxyq, String sfyxffylbt, String sfyxffyilbt) throws Exception {
+    String grxm = "";
+    URI u = new URIBuilder()
+            .setScheme("http")
+            .setHost("10.153.50.108:7001")
+            .setPath("/lemis3/lemis3MeritStation.do")
+            .setParameter("method", "saveBonusAddForSinglePer")
+            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s grbh=\"" + grbh + "\" msg=\"\" grxm=\"" + grxm + "\" gmsfhm=\"" + gmsfhm + "\" djlsh=\"" + djlsh + "\" btrylb=\"03\" syys=\"" + syys + "\" qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" /><d k=\"dw_xzbt\"><r qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" sfyxyq=\"" + sfyxyq + "\" sfyxffylbt=\"" + sfyxffylbt + "\" sfyxffyilbt=\"" + sfyxffyilbt + "\" yanglaobz=\"" + yanglaobz + "\" yiliaobz=\"" + yiliaobz + "\" /></d></p>")
+            .setParameter("_jbjgqxfw", "undefined")
+            .setParameter("_sbjbjg", "undefined")
+            .setParameter("_dwqxfw", "undefined")
+            .build();
+    HttpPost post = new HttpPost(u);
+    CloseableHttpResponse response = client.execute(post);
+    HttpEntity entity = response.getEntity();
+    String res = EntityUtils.toString(entity, "UTF-8");
+    String start = "alert('";
+    String end = "');";
+    return res.substring(res.indexOf(start) + 7, res.indexOf(end));
+  }
 
+  /**
+   * 检查补贴录入情况
+   *
+   * @param client   登陆后的client
+   * @param personLH PersonLH的实例
+   * @param month    要检查的月份
+   * @return 提示字符串
+   */
+  public static String check(CloseableHttpClient client, PersonLH personLH, String month) throws Exception {
+    if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
+      return "无法录入：存在未注销的工商信息！";
+    }
+    String syys = getSyys(client, 1, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh());
+    if (syys.equals("0")) {
+      return "无法录入：剩余补贴月数为零！";
+    }
+    String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys);
+    if (creat.equals("[]")) {
+      return "无法录入：" + month + "的补贴已录入";
+    }
+    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴未录入";
+  }
 
+  /**
+   * 检查补贴录入情况
+   *
+   * @param client 登陆后的client
+   * @param grxm   个人姓名
+   * @param gmsfhm 公民身份号码
+   * @param month  要检查的月份
+   * @return 提示字符串
+   */
+  public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
 
+    if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+      return "无法录入：存在未注销的工商信息！";
+    }
+    String datawindow = getTableMark(client, 3);
+    if (datawindow.equals("")) {
+      return "无法录入：无法打开窗口！";
+    }
+    //System.out.println(datawindow);
+    String grbh = getDataInfo(client, 3, gmsfhm).getString("grbh");
+    if (grbh.equals("")) {
+      return "无法录入：无法获取个人编号！";
+    }
+    //System.out.println(grbh);
+    JSONObject jsonObject = getDataDetail(client, 3, gmsfhm, grbh, datawindow);
+    String djlsh = jsonObject.getString("djlsh");
+    if (djlsh.equals("")) {
+      return "无法录入：无法获取登记流水号！";
+    }
+    //System.out.println(djlsh);
+
+    String syys = getSyys(client, 1, gmsfhm, grbh, djlsh);
+    if (syys.equals("0")) {
+      return "无法录入：剩余补贴月数为零！";
+    }
+    //System.out.println(syys);
+    String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, month, month, syys);
+    if (creat.equals("[]")) {
+      return "无法录入：" + month + "的补贴已录入";
+    }
+
+    return gmsfhm + grxm + "--" + month + "补贴未录入";
+  }
+
+  /**
+   * 保存
+   *
+   * @param client   登陆后的client
+   * @param personLH PersonLH的实例
+   * @param month    要保存的月份
+   * @return 提示字符串
+   */
+  public static String save(CloseableHttpClient client, PersonLH personLH, String month) throws Exception {
+    if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
+      return "存在未注销的工商信息！";
+    }
+    String syys = getSyys(client, 1, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh());
+    if (syys.equals("0")) {
+      return "剩余补贴月数为零！";
+    }
+    String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys);
+    if (creat.equals("[]")) {
+      return month + "的补贴已录入";
+    }
+
+    JSONArray jsStrs = JSONArray.fromObject(creat);
+    String yiliaobz = "", yanglaobz = "", sfyxyq = "", sfyxffylbt = "", sfyxffyilbt = "";
+
+    JSONObject jsStr = jsStrs.getJSONObject(0);
+    yiliaobz = jsStr.getString("yiliaobz");
+    yanglaobz = jsStr.getString("yanglaobz");
+    sfyxyq = jsStr.getString("sfyxyq");
+    sfyxffylbt = jsStr.getString("sfyxffylbt");
+    sfyxffyilbt = jsStr.getString("sfyxffyilbt");
+    String save = saveSubsidy(client, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
+    if (!save.equals("保存成功！")) {
+      return "保存错误，提示信息为：" + save;
+    }
+    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴已保存";
+  }
+
+  /**
+   * 保存
+   *
+   * @param client 登陆后的client
+   * @param grxm   个人姓名
+   * @param gmsfhm 公民身份号码
+   * @param month  要保存的月份
+   * @return 提示字符串
+   */
+  public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
+
+    if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+      return "存在未注销的工商信息！";
+    }
+    String datawindow = getTableMark(client, 3);
+    if (datawindow.equals("")) {
+      return "无法打开窗口！";
+    }
+    //System.out.println(datawindow);
+    String grbh = getDataInfo(client, 3, gmsfhm).getString("grbh");
+    if (grbh.equals("")) {
+      return "无法获取个人编号！";
+    }
+    //System.out.println(grbh);
+    JSONObject jsonObject = getDataDetail(client, 3, gmsfhm, grbh, datawindow);
+    String djlsh = jsonObject.getString("djlsh");
+    if (djlsh.equals("")) {
+      return "无法获取登记流水号！";
+    }
+    //System.out.println(djlsh);
+
+    String syys = getSyys(client, 1, gmsfhm, grbh, djlsh);
+    if (syys.equals("0")) {
+      return "剩余补贴月数为零！";
+    }
+    //System.out.println(syys);
+    String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, month, month, syys);
+    if (creat.equals("[]")) {
+      return month + "的补贴已录入";
+    }
+    //System.out.println(creat);
+    JSONArray jsStrs = JSONArray.fromObject(creat);
+    String yiliaobz = "", yanglaobz = "", sfyxyq = "", sfyxffylbt = "", sfyxffyilbt = "";
+
+    JSONObject jsStr = jsStrs.getJSONObject(0);
+    yiliaobz = jsStr.getString("yiliaobz");
+    yanglaobz = jsStr.getString("yanglaobz");
+    sfyxyq = jsStr.getString("sfyxyq");
+    sfyxffylbt = jsStr.getString("sfyxffylbt");
+    sfyxffyilbt = jsStr.getString("sfyxffyilbt");
+    String save = saveSubsidy(client, gmsfhm, grbh, djlsh, month, month, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
+    if (!save.equals("保存成功！")) {
+      return save;
+    }
+    return gmsfhm + grxm + "--" + month + "补贴已保存";
+  }
 
 }

@@ -29,6 +29,22 @@ public class qy {
 
     /**
      * 保存补贴
+     *
+     * @param client 登陆后的client
+     * @param gmsfhm 公民身份号码
+     * @param grbh 个人编号
+     * @param djlsh 登记流水号
+     * @param qsny 起始年月
+     * @param zzny 终止年月
+     * @param syys 剩余月数
+     * @param yanglaobz 养老补助
+     * @param yiliaobz 医疗补助
+     * @param shiyebz 失业补助
+     * @param gangweibz 岗位补助
+     * @param sfyxyq 是否有效XX
+     * @param sfyxffylbt 是否有效发放养老补贴
+     * @param sfyxffyilbt 是否有效发放医疗补贴
+     * @return
      */
     public static String saveSubsidy(CloseableHttpClient client, String gmsfhm, String grbh, String djlsh, String qsny, String zzny, String syys, String yanglaobz, String yiliaobz, String shiyebz, String gangweibz, String sfyxyq, String sfyxffylbt, String sfyxffyilbt) throws Exception {
         String grxm = "";
@@ -102,14 +118,14 @@ public class qy {
      * @return 提示字符串
      */
     public static String check(CloseableHttpClient client, PersonQY personQY, String month) throws Exception {
-        if (getCommerce(personQY.getGmsfhm()) || getCommerce(personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
+        if (getCommerce(client,personQY.getGmsfhm()) || getCommerce(client,personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
             return "无法录入：存在未注销的工商信息！";
         }
         Element element = getSecurity(personQY.getGmsfhm(), month);
         if (!personQY.getDwmc().equals(getDWMC(element))) {
             return "无法录入：单位名称不一致！";
         }
-        String syys = getSyys(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh());
+        String syys = getSyys(client, 1,personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh());
         if (syys.equals("0")) {
             return "无法录入：剩余补贴月数为零！";
         }
@@ -131,7 +147,7 @@ public class qy {
      */
     public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
 
-        if (getCommerce(gmsfhm) || getCommerce(gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+        if (getCommerce(client,gmsfhm) || getCommerce(client,gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
             return "无法录入：存在未注销的工商信息！";
         }
         String datawindow = getTableMark(client, 1);
@@ -156,7 +172,7 @@ public class qy {
             return "无法录入：单位名称不一致！";
         }
         //System.out.println(dwmc);
-        String syys = getSyys(client, gmsfhm, grbh, djlsh);
+        String syys = getSyys(client, 1,gmsfhm, grbh, djlsh);
         if (syys.equals("0")) {
             return "无法录入：剩余补贴月数为零！";
         }
@@ -178,14 +194,14 @@ public class qy {
      * @return 提示字符串
      */
     public static String save(CloseableHttpClient client, PersonQY personQY, String month) throws Exception {
-        if (getCommerce(personQY.getGmsfhm()) || getCommerce(personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
+        if (getCommerce(client,personQY.getGmsfhm()) || getCommerce(client,personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
             return "存在未注销的工商信息！";
         }
         Element element = getSecurity(personQY.getGmsfhm(), month);
         if (!personQY.getDwmc().equals(getDWMC(element))) {
             return "单位名称不一致！";
         }
-        String syys = getSyys(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh());
+        String syys = getSyys(client, 1,personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh());
         if (syys.equals("0")) {
             return "剩余补贴月数为零！";
         }
@@ -223,7 +239,7 @@ public class qy {
      */
     public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
 
-        if (getCommerce(gmsfhm) || getCommerce(gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+        if (getCommerce(client,gmsfhm) || getCommerce(client,gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
             return "存在未注销的工商信息！";
         }
         String datawindow = getTableMark(client, 1);
@@ -248,7 +264,7 @@ public class qy {
             return "单位名称不一致！";
         }
         //System.out.println(dwmc);
-        String syys = getSyys(client, gmsfhm, grbh, djlsh);
+        String syys = getSyys(client, 1,gmsfhm, grbh, djlsh);
         if (syys.equals("0")) {
             return "剩余补贴月数为零！";
         }
@@ -276,27 +292,4 @@ public class qy {
         return gmsfhm + grxm + "--" + month + "补贴已保存";
     }
 
-    public static void main(String[] args) throws Exception {
-        String month="";
-        CloseableHttpClient client=login("", "");
-        List<PersonQY> persons = ImportQY("企业");
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("sheet1");
-        XSSFRow row = sheet.createRow(0);
-        row.createCell(0).setCellValue("公民身份号码");
-        row.createCell(1).setCellValue("个人姓名");
-        row.createCell(2).setCellValue("结果");
-        for (PersonQY person : persons) {
-            int total = sheet.getLastRowNum();
-            for (int i = 1; i < total + 1; i++) {
-                XSSFRow rowNew = sheet.createRow(i);
-                rowNew.createCell(0).setCellValue(person.getGmsfhm());
-                rowNew.createCell(1).setCellValue(person.getGrxm());
-                rowNew.createCell(1).setCellValue(save(client,person.getGmsfhm(),person.getGrxm(),month));
-            }
-        }
-        FileOutputStream os = new FileOutputStream("c:\\" + "录入结果" + ".xlsx");
-        workbook.write(os);
-        os.close();
-    }
 }

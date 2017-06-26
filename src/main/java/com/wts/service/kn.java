@@ -69,7 +69,7 @@ public class kn {
         if (datawindow.equals("")) {
             return PersonKNs;
         }
-        JG jg = getJG(client);
+        JG jg = getJG(client).get(0);
         Integer total = Integer.parseInt(getDataTotal(client, datawindow, 4, jg.getJbjgbh(), jg.getJgbh(), jg.getJgmc()));
         String mergePerson = getDataAll(client, datawindow, total);
         JSONArray jsStrs = JSONArray.fromObject(mergePerson);
