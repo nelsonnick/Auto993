@@ -11,14 +11,20 @@ public class t {
     private static void saveProperty() throws Exception {
         // 保存文件
         Properties propertie = new Properties();
-        propertie.setProperty("passwd", "111111111");
+
+
         ClassLoader classLoader = t.class.getClassLoader();
         URL resource = classLoader.getResource("info.properties");
         String path = resource.getPath();
+        File file = new File(path);
+        FileInputStream fis = new FileInputStream(file);
+        FileOutputStream fos = new FileOutputStream(file);
+        propertie.load(fis);
+        propertie.setProperty("passwd", "111111111");
 
-        FileOutputStream outputFile = new FileOutputStream(path);
-        propertie.store(outputFile, "danciben");
-        outputFile.close();
+        propertie.store(fos, "保存文件");
+
+        fos.close();
     }
 
 
