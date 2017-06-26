@@ -293,16 +293,13 @@ public class Export {
     row.createCell(0).setCellValue("公民身份号码");
     row.createCell(1).setCellValue("个人姓名");
     row.createCell(2).setCellValue("结果");
-    for (PersonQY person : persons) {
-      int total = sheet.getLastRowNum();
-      for (int i = 1; i < total + 1; i++) {
-        XSSFRow rowNew = sheet.createRow(i);
-        rowNew.createCell(0).setCellValue(person.getGmsfhm());
-        rowNew.createCell(1).setCellValue(person.getGrxm());
-        rowNew.createCell(1).setCellValue(com.wts.service.qy.save(client, person.getGmsfhm(), person.getGrxm(), month));
-      }
+    for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFRow rowNew = sheet.createRow(i);
+      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
+      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
+      rowNew.createCell(2).setCellValue(com.wts.service.qy.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
-    FileOutputStream os = new FileOutputStream("c:\\" +month+ "企业吸纳录入结果" + ".xlsx");
+    FileOutputStream os = new FileOutputStream("c:\\" + month + "企业吸纳录入结果" + ".xlsx");
     workbook.write(os);
     os.close();
   }
@@ -321,16 +318,13 @@ public class Export {
     row.createCell(0).setCellValue("公民身份号码");
     row.createCell(1).setCellValue("个人姓名");
     row.createCell(2).setCellValue("结果");
-    for (PersonGG person : persons) {
-      int total = sheet.getLastRowNum();
-      for (int i = 1; i < total + 1; i++) {
-        XSSFRow rowNew = sheet.createRow(i);
-        rowNew.createCell(0).setCellValue(person.getGmsfhm());
-        rowNew.createCell(1).setCellValue(person.getGrxm());
-        rowNew.createCell(1).setCellValue(com.wts.service.gg.save(client, person.getGmsfhm(), person.getGrxm(), month));
-      }
+    for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFRow rowNew = sheet.createRow(i);
+      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
+      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
+      rowNew.createCell(2).setCellValue(com.wts.service.gg.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
-    FileOutputStream os = new FileOutputStream("c:\\" +month+ "公益岗位录入结果" + ".xlsx");
+    FileOutputStream os = new FileOutputStream("c:\\" + month + "公益岗位录入结果" + ".xlsx");
     workbook.write(os);
     os.close();
   }
@@ -349,17 +343,15 @@ public class Export {
     row.createCell(0).setCellValue("公民身份号码");
     row.createCell(1).setCellValue("个人姓名");
     row.createCell(2).setCellValue("结果");
-    for (PersonLH person : persons) {
-      int total = sheet.getLastRowNum();
-      for (int i = 1; i < total + 1; i++) {
-        XSSFRow rowNew = sheet.createRow(i);
-        rowNew.createCell(0).setCellValue(person.getGmsfhm());
-        rowNew.createCell(1).setCellValue(person.getGrxm());
-        rowNew.createCell(1).setCellValue(com.wts.service.lh.save(client, person.getGmsfhm(), person.getGrxm(), month));
-      }
+    for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFRow rowNew = sheet.createRow(i);
+      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
+      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
+      rowNew.createCell(2).setCellValue(com.wts.service.lh.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
-    FileOutputStream os = new FileOutputStream("c:\\" +month+ "灵活就业录入结果" + ".xlsx");
+    FileOutputStream os = new FileOutputStream("c:\\" + month + "灵活就业录入结果" + ".xlsx");
     workbook.write(os);
     os.close();
+    System.out.println("请查看结果");
   }
 }

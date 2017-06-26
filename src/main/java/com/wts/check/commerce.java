@@ -26,7 +26,7 @@ public class commerce {
     if (jsStrs.size() > 0) {
       for (int k = 0; k < jsStrs.size(); k++) {
         JSONObject jsStr = jsStrs.getJSONObject(k);
-        if (jsStr.getString("zxrq").equals("") || jsStr.getString("dxrq").equals("")) {
+        if (jsStr.getString("zxrq").equals("") && jsStr.getString("dxrq").equals("")) {
           result = true;
           break;
         }

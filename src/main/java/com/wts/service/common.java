@@ -42,9 +42,10 @@ public class common {
     CloseableHttpClient client = HttpClients.createDefault();
     CloseableHttpResponse response = client.execute(post);
     HttpEntity entity = response.getEntity();
+    String str=EntityUtils.toString(entity, "UTF-8");
     Thread.sleep(1000);
-    if (EntityUtils.toString(entity, "UTF-8").contains("您输入的密码不正确")) {
-      System.out.println("登录失败：" + EntityUtils.toString(entity, "UTF-8"));
+    if (str.contains("您输入的密码不正确")) {
+      System.out.println("登录失败：" + str);
       return null;
     } else {
       System.out.println("登录成功");
@@ -399,13 +400,18 @@ public class common {
     CloseableHttpResponse response = client.execute(post);
     HttpEntity entity = response.getEntity();
     String res = EntityUtils.toString(entity, "UTF-8");
-    if (res.indexOf("月的补贴已录入") > 0
-            || res.indexOf("补贴享受起始年月早于审批日期，请检查！") > 0
-            || res.indexOf("人员【" + qsny + "】到【" + zzny + "】的补贴预算，请检查！") > 0
-            || res.indexOf("的资金报表已经上报，不允许维护补贴，请检查！") > 0
-            || res.indexOf("剩余月数不足，当前剩余") > 0
-            ) {
-      return "[]";
+    if (res.indexOf("月的补贴已录入") > 0){
+      return "指定月份补贴已录入！";
+    }else if(res.indexOf("补贴享受起始年月早于审批日期，请检查！") > 0){
+      return "补贴享受起始年月早于审批日期，请检查！";
+    }else if(res.indexOf("人员【" + qsny + "】到【" + zzny + "】的补贴预算，请检查！") > 0){
+      return "补贴预算异常，请检查！";
+    }else if(res.indexOf("的资金报表已经上报，不允许维护补贴，请检查！") > 0){
+      return "资金报表已经上报，不允许维护补贴，请检查！";
+    }else if(res.indexOf("剩余月数不足，当前剩余") > 0){
+      return "剩余月数不足，请检查！";
+    }else if(res.indexOf("的低保待遇的记录") > 0){
+      return "缺少低保待遇的记录，请检查！";
     } else {
       String start = "init('true','true','[";
       String end = "]');</script>";

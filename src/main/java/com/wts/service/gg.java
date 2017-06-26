@@ -168,8 +168,8 @@ public class gg {
       return "无法录入：剩余补贴月数为零！";
     }
     String creat = creatSubsidy(client, 2, personGG.getGmsfhm(), personGG.getGrbh(), personGG.getDjlsh(), month, month, syys);
-    if (creat.equals("[]")) {
-      return "无法录入：" + month + "的补贴已录入";
+    if (!creat.substring(0,1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为："+creat;
     }
     return personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴未录入";
   }
@@ -216,8 +216,8 @@ public class gg {
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 2, gmsfhm, grbh, djlsh, month, month, syys);
-    if (creat.equals("[]")) {
-      return "无法录入：" + month + "的补贴已录入";
+    if (!creat.substring(0,1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为："+creat;
     }
 
     return gmsfhm + grxm + "--" + month + "补贴未录入";
@@ -244,8 +244,8 @@ public class gg {
       return "剩余补贴月数为零！";
     }
     String creat = creatSubsidy(client, 2, personGG.getGmsfhm(), personGG.getGrbh(), personGG.getDjlsh(), month, month, syys);
-    if (creat.equals("[]")) {
-      return month + "的补贴已录入";
+    if (!creat.substring(0,1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为："+creat;
     }
 
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -263,8 +263,8 @@ public class gg {
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
     }
-    System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴已保存");
-    return personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴已保存";
+    System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴录入成功");
+    return personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "补贴录入成功";
   }
 
   /**
@@ -326,10 +326,11 @@ public class gg {
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
     String save = saveSubsidy(client, gmsfhm, grbh, djlsh, month, month, syys, yanglaobz, yiliaobz, shiyebz, gangweibz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
+      System.out.println(gmsfhm + grxm + "--" + month + save);
       return save;
     }
-    System.out.println(gmsfhm + grxm + "--" + month + "补贴已保存");
-    return gmsfhm + grxm + "--" + month + "补贴已保存";
+    System.out.println(gmsfhm + grxm + "--" + month + "补贴录入成功！");
+    return month + "补贴录入成功！";
   }
 
 }

@@ -173,7 +173,7 @@ public class lh {
     }
     String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys);
     if (creat.equals("[]")) {
-      return "无法录入：" + month + "的补贴已录入";
+      return "无法录入：" + month + "的补贴，请人工核查";
     }
     return personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴未录入";
   }
@@ -215,8 +215,8 @@ public class lh {
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, month, month, syys);
-    if (creat.equals("[]")) {
-      return "无法录入：" + month + "的补贴已录入";
+    if (!creat.substring(0,1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为："+creat;
     }
 
     return gmsfhm + grxm + "--" + month + "补贴未录入";
@@ -234,13 +234,13 @@ public class lh {
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
-    String syys = getSyys(client, 1, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh());
+    String syys = getSyys(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh());
     if (syys.equals("0")) {
       return "剩余补贴月数为零！";
     }
     String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys);
-    if (creat.equals("[]")) {
-      return month + "的补贴已录入";
+    if (!creat.substring(0,1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为："+creat;
     }
 
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -256,8 +256,8 @@ public class lh {
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
     }
-    System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴已保存");
-    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴已保存";
+    System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴录入成功！");
+    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "补贴录入成功！";
   }
 
   /**
@@ -272,33 +272,39 @@ public class lh {
   public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
 
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+      System.out.println(gmsfhm + grxm + "--" + month + "存在未注销的工商信息！");
       return "存在未注销的工商信息！";
     }
     String datawindow = getTableMark(client, 3);
     if (datawindow.equals("")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "无法打开窗口！");
       return "无法打开窗口！";
     }
     //System.out.println(datawindow);
     String grbh = getDataInfo(client, 3, gmsfhm).getString("grbh");
     if (grbh.equals("")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "无法获取个人编号！");
       return "无法获取个人编号！";
     }
     //System.out.println(grbh);
     JSONObject jsonObject = getDataDetail(client, 3, gmsfhm, grbh, datawindow);
     String djlsh = jsonObject.getString("djlsh");
     if (djlsh.equals("")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "无法获取登记流水号！");
       return "无法获取登记流水号！";
     }
     //System.out.println(djlsh);
 
-    String syys = getSyys(client, 1, gmsfhm, grbh, djlsh);
+    String syys = getSyys(client, 3, gmsfhm, grbh, djlsh);
     if (syys.equals("0")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "剩余补贴月数为零！");
       return "剩余补贴月数为零！";
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, month, month, syys);
-    if (creat.equals("[]")) {
-      return month + "的补贴已录入";
+    if (!creat.substring(0,1).equals("[")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "的补贴生成错误，请人工核查！原因为："+creat);
+      return month + "的补贴生成错误，请人工核查！原因为："+creat;
     }
     //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -312,10 +318,11 @@ public class lh {
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
     String save = saveSubsidy(client, gmsfhm, grbh, djlsh, month, month, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
+      System.out.println(gmsfhm + grxm + "--" + month + save);
       return save;
     }
-    System.out.println(gmsfhm + grxm + "--" + month + "补贴已保存");
-    return gmsfhm + grxm + "--" + month + "补贴已保存";
+    System.out.println(gmsfhm + grxm + "--" + month + "补贴录入成功！");
+    return month + "补贴录入成功！";
   }
 
 }
