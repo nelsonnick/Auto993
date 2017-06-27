@@ -9,12 +9,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dom4j.Element;
 
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +19,6 @@ import static com.wts.check.commerce.getCommerce;
 import static com.wts.check.security.getDWMC;
 import static com.wts.check.security.getSecurity;
 import static com.wts.service.common.*;
-import static com.wts.util.Import.ImportQY;
 
 public class qy {
 
