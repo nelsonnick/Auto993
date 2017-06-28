@@ -27,6 +27,7 @@ import static com.wts.check.security.getDWMC;
 import static com.wts.check.security.getSecurity;
 import static com.wts.service.common.*;
 import static com.wts.service.common.creatSubsidy;
+import static com.wts.util.IDKit.checkID_B;
 import static com.wts.util.Import.ImportLH;
 import static com.wts.util.Import.ImportQY;
 
@@ -164,6 +165,10 @@ public class lh {
    * @return 提示字符串
    */
   public static String check(CloseableHttpClient client, PersonLH personLH, String month) throws Exception {
+    if(!checkID_B(personLH.getGmsfhm())){
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm()+ "--" + month + "身份证号码错误！");
+      return "无法录入：身份证号码错误！";
+    }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -188,7 +193,10 @@ public class lh {
    * @return 提示字符串
    */
   public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
-
+    if(!checkID_B(gmsfhm)){
+      System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
+      return "无法录入：身份证号码错误！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -231,6 +239,11 @@ public class lh {
    * @return 提示字符串
    */
   public static String save(CloseableHttpClient client, PersonLH personLH, String month) throws Exception {
+
+    if(!checkID_B(personLH.getGmsfhm())){
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm()+ "--" + month + "身份证号码错误！");
+      return "身份证号码错误！";
+    }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
@@ -270,6 +283,11 @@ public class lh {
    * @return 提示字符串
    */
   public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
+
+    if(!checkID_B(gmsfhm)){
+      System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
+      return "身份证号码错误！";
+    }
 
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       System.out.println(gmsfhm + grxm + "--" + month + "存在未注销的工商信息！");
