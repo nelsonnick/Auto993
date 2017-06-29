@@ -1,6 +1,9 @@
 package com.wts.util;
 
 import com.wts.entity.*;
+import com.wts.service.GongGang;
+import com.wts.service.LingHuo;
+import com.wts.service.QiYe;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -297,7 +300,7 @@ public class Export {
       XSSFRow rowNew = sheet.createRow(i);
       rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      rowNew.createCell(2).setCellValue(com.wts.service.qy.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
+      rowNew.createCell(2).setCellValue(QiYe.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
     FileOutputStream os = new FileOutputStream("c:\\" + month + "企业吸纳录入结果" + ".xlsx");
     workbook.write(os);
@@ -322,7 +325,7 @@ public class Export {
       XSSFRow rowNew = sheet.createRow(i);
       rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      rowNew.createCell(2).setCellValue(com.wts.service.gg.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
+      rowNew.createCell(2).setCellValue(GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
     FileOutputStream os = new FileOutputStream("c:\\" + month + "公益岗位录入结果" + ".xlsx");
     workbook.write(os);
@@ -347,7 +350,7 @@ public class Export {
       XSSFRow rowNew = sheet.createRow(i);
       rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      rowNew.createCell(2).setCellValue(com.wts.service.lh.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
+      rowNew.createCell(2).setCellValue(LingHuo.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
     FileOutputStream os = new FileOutputStream("c:\\" + month + "灵活就业录入结果" + ".xlsx");
     workbook.write(os);

@@ -1,6 +1,6 @@
 package com.wts.service;
 
-import com.wts.util.util;
+import com.wts.util.Kit;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
@@ -14,7 +14,7 @@ import org.apache.http.util.EntityUtils;
 import java.net.URI;
 
 
-public class common {
+public class Common {
 
   /**
    * 登录系统
@@ -30,7 +30,7 @@ public class common {
             .setPath("/lemis3/logon.do")
             .setParameter("method", "doLogon")
             .setParameter("userid", userid)
-            .setParameter("passwd", util.getMD5(passwd))
+            .setParameter("passwd", Kit.getMD5(passwd))
             .setParameter("userLogSign", "0")
             .setParameter("passWordLogSign", "0")
             .setParameter("screenHeight", "768")
@@ -42,7 +42,7 @@ public class common {
     CloseableHttpClient client = HttpClients.createDefault();
     CloseableHttpResponse response = client.execute(post);
     HttpEntity entity = response.getEntity();
-    String str=EntityUtils.toString(entity, "UTF-8");
+    String str = EntityUtils.toString(entity, "UTF-8");
     Thread.sleep(1000);
     if (str.contains("您输入的密码不正确")) {
       System.out.println("登录失败：" + str);
@@ -196,7 +196,7 @@ public class common {
       case 2:  // 公益岗位
         path = "/lemis3/lemis3MeritStation.do";
         method = "queryMeritStaResettlement";
-        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\""+dwbh+"\" dwmc=\""+dwmc+"\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\"" + dwbh + "\" dwmc=\"" + dwmc + "\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
         break;
       default:
         return "";
@@ -320,7 +320,7 @@ public class common {
    * @param djlsh  登记流水号
    * @return 剩余月数。无法获取则返回空
    */
-  public static String getSyys(CloseableHttpClient client, Integer type,String gmsfhm, String grbh, String djlsh) throws Exception {
+  public static String getSyys(CloseableHttpClient client, Integer type, String gmsfhm, String grbh, String djlsh) throws Exception {
     String grxm = "", btrylb;
     switch (type) {
       case 1:  // 企业吸纳
@@ -340,7 +340,7 @@ public class common {
             .setHost("10.153.50.108:7001")
             .setPath("/lemis3/lemis3MeritStation.do")
             .setParameter("method", "enterBonusAddForSinglePer")
-            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s djlsh=\"" + djlsh + "\"/><s grbh=\"" + grbh + "\"/><s gmsfhm=\"" + gmsfhm + "\"/><s grxm=\"" + grxm + "\"/><s btrylb=\""+btrylb+"\"/></p>")
+            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s djlsh=\"" + djlsh + "\"/><s grbh=\"" + grbh + "\"/><s gmsfhm=\"" + gmsfhm + "\"/><s grxm=\"" + grxm + "\"/><s btrylb=\"" + btrylb + "\"/></p>")
             .setParameter("_jbjgqxfw", "undefined")
             .setParameter("_sbjbjg", "undefined")
             .setParameter("_dwqxfw", "undefined")
@@ -400,18 +400,22 @@ public class common {
     CloseableHttpResponse response = client.execute(post);
     HttpEntity entity = response.getEntity();
     String res = EntityUtils.toString(entity, "UTF-8");
-    if (res.indexOf("月的补贴已录入") > 0){
+    if (res.indexOf("月的补贴已录入") > 0) {
       return "指定月份补贴已录入！";
-    }else if(res.indexOf("补贴享受起始年月早于审批日期，请检查！") > 0){
+    } else if (res.indexOf("补贴享受起始年月早于审批日期，请检查！") > 0) {
       return "补贴享受起始年月早于审批日期，请检查！";
-    }else if(res.indexOf("人员【" + qsny + "】到【" + zzny + "】的补贴预算，请检查！") > 0){
+    } else if (res.indexOf("人员【" + qsny + "】到【" + zzny + "】的补贴预算，请检查！") > 0) {
       return "补贴预算异常，请检查！";
-    }else if(res.indexOf("的资金报表已经上报，不允许维护补贴，请检查！") > 0){
+    } else if (res.indexOf("的资金报表已经上报，不允许维护补贴，请检查！") > 0) {
       return "资金报表已经上报，不允许维护补贴，请检查！";
-    }else if(res.indexOf("剩余月数不足，当前剩余") > 0){
+    } else if (res.indexOf("剩余月数不足，当前剩余") > 0) {
       return "剩余月数不足，请检查！";
-    }else if(res.indexOf("的低保待遇的记录") > 0){
+    } else if (res.indexOf("的低保待遇的记录") > 0) {
       return "缺少低保待遇的记录，请检查！";
+    } else if (res.indexOf("不存在社保缴费信息") > 0) {
+      return "不存在社保缴费信息，请检查！";
+    } else if (res.indexOf("该人员的家庭成员") > 0) {
+      return "该人员的家庭成员情况异常，请检查！";
     } else {
       String start = "init('true','true','[";
       String end = "]');</script>";

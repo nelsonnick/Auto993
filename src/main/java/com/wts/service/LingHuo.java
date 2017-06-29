@@ -3,7 +3,6 @@ package com.wts.service;
 
 import com.wts.entity.JG;
 import com.wts.entity.PersonLH;
-import com.wts.entity.PersonQY;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
@@ -12,32 +11,23 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.dom4j.Element;
 
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wts.check.commerce.getCommerce;
-import static com.wts.check.security.getDWMC;
-import static com.wts.check.security.getSecurity;
-import static com.wts.service.common.*;
-import static com.wts.service.common.creatSubsidy;
+import static com.wts.check.commerce.Commerce.getCommerce;
+import static com.wts.service.Common.*;
+import static com.wts.service.Common.creatSubsidy;
 import static com.wts.util.IDKit.checkID_B;
-import static com.wts.util.Import.ImportLH;
-import static com.wts.util.Import.ImportQY;
 
-public class lh {
+public class LingHuo {
 
   /**
    * 获取机构信息
    */
   public static List<JG> getJG(CloseableHttpClient client) throws Exception {
-    List<JG> jgs = null;
+    List<JG> jgs = new ArrayList<JG>();
     URI u = new URIBuilder()
             .setScheme("http")
             .setHost("10.153.50.108:7001")
@@ -59,7 +49,7 @@ public class lh {
       JSONArray jsStrs = JSONArray.fromObject(res.substring(res.indexOf(start) + 20, res.indexOf(end) + 1));
       for (int i = 0; i < jsStrs.size(); i++) {
         JSONObject jsStr = jsStrs.getJSONObject(i);
-        JG jg =new JG();
+        JG jg = new JG();
         jg.setJbjgbh(jsStr.getString("jbjgbh"));
         jg.setJgbh(jsStr.getString("jgbh"));
         jg.setJgmc(jsStr.getString("jgmc"));
@@ -165,12 +155,15 @@ public class lh {
    * @return 提示字符串
    */
   public static String check(CloseableHttpClient client, PersonLH personLH, String month) throws Exception {
-    if(!checkID_B(personLH.getGmsfhm())){
-      System.out.println(personLH.getGmsfhm() + personLH.getGrxm()+ "--" + month + "身份证号码错误！");
+    if (!checkID_B(personLH.getGmsfhm())) {
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
+    }
+    if (!getJG(client).get(0).getJgmc().equals(personLH.getCjjgmc())) {
+      return "无法录入：当前用户所属机构与指定人员创建机构不一致！";
     }
     String syys = getSyys(client, 1, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh());
     if (syys.equals("0")) {
@@ -193,7 +186,7 @@ public class lh {
    * @return 提示字符串
    */
   public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
-    if(!checkID_B(gmsfhm)){
+    if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
@@ -215,16 +208,18 @@ public class lh {
     if (djlsh.equals("")) {
       return "无法录入：无法获取登记流水号！";
     }
-    //System.out.println(djlsh);
-
+    String cjjgmc = jsonObject.getString("cjjgmc");
+    if (!getJG(client).get(0).getJgmc().equals(cjjgmc)) {
+      return "无法录入：当前用户所属机构与指定人员创建机构不一致！";
+    }
     String syys = getSyys(client, 1, gmsfhm, grbh, djlsh);
     if (syys.equals("0")) {
       return "无法录入：剩余补贴月数为零！";
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, month, month, syys);
-    if (!creat.substring(0,1).equals("[")) {
-      return month + "的补贴生成错误，请人工核查！原因为："+creat;
+    if (!creat.substring(0, 1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
 
     return gmsfhm + grxm + "--" + month + "补贴未录入";
@@ -240,20 +235,23 @@ public class lh {
    */
   public static String save(CloseableHttpClient client, PersonLH personLH, String month) throws Exception {
 
-    if(!checkID_B(personLH.getGmsfhm())){
-      System.out.println(personLH.getGmsfhm() + personLH.getGrxm()+ "--" + month + "身份证号码错误！");
+    if (!checkID_B(personLH.getGmsfhm())) {
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
+    }
+    if (!getJG(client).get(0).getJgmc().equals(personLH.getCjjgmc())) {
+      return "无法录入：当前用户所属机构与指定人员创建机构不一致！";
     }
     String syys = getSyys(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh());
     if (syys.equals("0")) {
       return "剩余补贴月数为零！";
     }
     String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys);
-    if (!creat.substring(0,1).equals("[")) {
-      return month + "的补贴生成错误，请人工核查！原因为："+creat;
+    if (!creat.substring(0, 1).equals("[")) {
+      return month + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
 
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -284,7 +282,7 @@ public class lh {
    */
   public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String month) throws Exception {
 
-    if(!checkID_B(gmsfhm)){
+    if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
@@ -312,7 +310,10 @@ public class lh {
       return "无法获取登记流水号！";
     }
     //System.out.println(djlsh);
-
+    String cjjgmc = jsonObject.getString("cjjgmc");
+    if (!getJG(client).get(0).getJgmc().equals(cjjgmc)) {
+      return "无法录入：当前用户所属机构与指定人员创建机构不一致！";
+    }
     String syys = getSyys(client, 3, gmsfhm, grbh, djlsh);
     if (syys.equals("0")) {
       System.out.println(gmsfhm + grxm + "--" + month + "剩余补贴月数为零！");
@@ -320,9 +321,9 @@ public class lh {
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, month, month, syys);
-    if (!creat.substring(0,1).equals("[")) {
-      System.out.println(gmsfhm + grxm + "--" + month + "的补贴生成错误，请人工核查！原因为："+creat);
-      return month + "的补贴生成错误，请人工核查！原因为："+creat;
+    if (!creat.substring(0, 1).equals("[")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "的补贴生成错误，请人工核查！原因为：" + creat);
+      return month + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
     //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);

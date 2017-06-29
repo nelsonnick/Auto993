@@ -16,12 +16,12 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wts.service.common.getDataAll;
-import static com.wts.service.common.getDataTotal;
-import static com.wts.service.common.getTableMark;
-import static com.wts.service.lh.getJG;
+import static com.wts.service.Common.getDataAll;
+import static com.wts.service.Common.getDataTotal;
+import static com.wts.service.Common.getTableMark;
+import static com.wts.service.LingHuo.getJG;
 
-public class kn {
+public class KunNan {
     /**
      * 获取家属数据
      *

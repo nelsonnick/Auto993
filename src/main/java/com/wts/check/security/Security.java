@@ -1,4 +1,4 @@
-package com.wts.check;
+package com.wts.check.security;
 
 import okhttp3.*;
 import org.dom4j.Document;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class security {
+public class Security {
 
     /**
      * 获取保险类型
@@ -999,9 +999,9 @@ public class security {
         } else {
             switch (getSecurityType(element.attributeValue("dwbh"))) {
                 case "个人一险":
-                    return "372.51";
+                    return "352.00";
                 case "个人两险":
-                    return "372.51";
+                    return "352.00";
                 case "单位五险":
                     return "";
                 default:
@@ -1023,7 +1023,7 @@ public class security {
                 case "个人一险":
                     return "0.00";
                 case "个人两险":
-                    return "";
+                    return "172.00";
                 case "单位五险":
                     return "";
                 default:

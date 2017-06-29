@@ -1,6 +1,6 @@
-package com.wts.check;
+package com.wts.check.commerce;
 
-import com.wts.util.util;
+import com.wts.util.Kit;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
@@ -12,9 +12,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.net.URI;
 
-import static com.wts.service.common.login;
-
-public class commerce {
+public class Commerce {
   /**
    * 根据是否存在注销日期或吊销日期判断是否有工商信息
    *
@@ -58,10 +56,10 @@ public class commerce {
     HttpEntity entity = response.getEntity();
     String res = EntityUtils.toString(entity, "UTF-8");
 
-    if (util.getCount(res, "init('true','true','[") == 1) {
+    if (Kit.getCount(res, "init('true','true','[") == 1) {
       JSONArray jsStrs = JSONArray.fromObject(res.substring(res.lastIndexOf("init('true','true','[") + 20, res.lastIndexOf("]');</script>") + 1));
       return checkJson(jsStrs);
-    } else if (util.getCount(res, "init('true','true','[") == 1) {
+    } else if (Kit.getCount(res, "init('true','true','[") == 1) {
       JSONArray jsStrs1 = JSONArray.fromObject(res.substring(res.lastIndexOf("init('true','true','[") + 20, res.lastIndexOf("]');</script>") + 1));
       JSONArray jsStrs2 = JSONArray.fromObject(res.substring(res.indexOf("init('true','true','[") + 20, res.indexOf("]');</script>") + 1));
       return checkJson(jsStrs1) || checkJson(jsStrs2);

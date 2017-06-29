@@ -15,14 +15,14 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wts.check.commerce.getCommerce;
-import static com.wts.check.security.getDWMC;
-import static com.wts.check.security.getSecurity;
-import static com.wts.service.common.*;
-import static com.wts.service.common.creatSubsidy;
+import static com.wts.check.commerce.Commerce.getCommerce;
+import static com.wts.check.security.Security.getDWMC;
+import static com.wts.check.security.Security.getSecurity;
+import static com.wts.service.Common.*;
+import static com.wts.service.Common.creatSubsidy;
 import static com.wts.util.IDKit.checkID_B;
 
-public class gg {
+public class GongGang {
 
   /**
    * 获取单位信息

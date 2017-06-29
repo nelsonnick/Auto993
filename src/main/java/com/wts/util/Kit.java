@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class util {
+public class Kit {
     /**
      * 将形如20140625000000变成2014/06/25 00:00:00
      */
