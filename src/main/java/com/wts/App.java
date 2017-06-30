@@ -44,7 +44,9 @@ public class App {
     } else if (result.equals("6")) {
       com.wts.check.security.Ggywzxt.analysis();
     } else if (result.equals("7")) {
-      ;
+
+    }else{
+      System.out.println("请输入数字1到数字7");
     }
   }
 }

@@ -308,6 +308,32 @@ public class Export {
   }
 
   /**
+   * 导出企业吸纳录入结果
+   *
+   * @param client  登陆后的client
+   * @param persons 人员列表
+   * @param startMonth 起始月份
+   * @param endMonth   终止月份
+   */
+  public static void ExportQYResult(CloseableHttpClient client, List<PersonQY> persons, String startMonth, String endMonth) throws Exception {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("sheet1");
+    XSSFRow row = sheet.createRow(0);
+    row.createCell(0).setCellValue("公民身份号码");
+    row.createCell(1).setCellValue("个人姓名");
+    row.createCell(2).setCellValue("结果");
+    for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFRow rowNew = sheet.createRow(i);
+      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
+      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
+      rowNew.createCell(2).setCellValue(QiYe.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), startMonth,endMonth));
+    }
+    FileOutputStream os = new FileOutputStream("c:\\" + startMonth+ "-" + endMonth + "企业吸纳录入结果" + ".xlsx");
+    workbook.write(os);
+    os.close();
+  }
+
+  /**
    * 导出公益岗位录入结果
    *
    * @param client  登陆后的client
@@ -328,6 +354,32 @@ public class Export {
       rowNew.createCell(2).setCellValue(GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
     FileOutputStream os = new FileOutputStream("c:\\" + month + "公益岗位录入结果" + ".xlsx");
+    workbook.write(os);
+    os.close();
+  }
+
+  /**
+   * 导出公益岗位录入结果
+   *
+   * @param client  登陆后的client
+   * @param persons 人员列表
+   * @param startMonth 起始月份
+   * @param endMonth   终止月份
+   */
+  public static void ExportGGResult(CloseableHttpClient client, List<PersonGG> persons, String startMonth, String endMonth) throws Exception {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("sheet1");
+    XSSFRow row = sheet.createRow(0);
+    row.createCell(0).setCellValue("公民身份号码");
+    row.createCell(1).setCellValue("个人姓名");
+    row.createCell(2).setCellValue("结果");
+    for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFRow rowNew = sheet.createRow(i);
+      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
+      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
+      rowNew.createCell(2).setCellValue(GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), startMonth, endMonth));
+    }
+    FileOutputStream os = new FileOutputStream("c:\\" + startMonth + "-" + endMonth + "公益岗位录入结果" + ".xlsx");
     workbook.write(os);
     os.close();
   }
@@ -357,4 +409,32 @@ public class Export {
     os.close();
     System.out.println("请查看结果");
   }
+
+  /**
+   * 导出灵活就业录入结果
+   *
+   * @param client     登陆后的client
+   * @param persons    人员列表
+   * @param startMonth 起始月份
+   * @param endMonth   终止月份
+   */
+  public static void ExportLHResult(CloseableHttpClient client, List<PersonLH> persons, String startMonth, String endMonth) throws Exception {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("sheet1");
+    XSSFRow row = sheet.createRow(0);
+    row.createCell(0).setCellValue("公民身份号码");
+    row.createCell(1).setCellValue("个人姓名");
+    row.createCell(2).setCellValue("结果");
+    for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFRow rowNew = sheet.createRow(i);
+      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
+      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
+      rowNew.createCell(2).setCellValue(LingHuo.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), startMonth, endMonth));
+    }
+    FileOutputStream os = new FileOutputStream("c:\\" + startMonth + "-" + endMonth + "灵活就业录入结果" + ".xlsx");
+    workbook.write(os);
+    os.close();
+    System.out.println("请查看结果");
+  }
+
 }
