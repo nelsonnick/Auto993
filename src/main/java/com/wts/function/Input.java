@@ -1,28 +1,22 @@
 package com.wts.function;
 
 import com.wts.entity.PersonLH;
-import com.wts.util.PropKit;
+import com.wts.service.Common;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Properties;
 
 import static com.wts.service.Common.login;
 import static com.wts.util.Export.ExportLHResult;
 import static com.wts.util.Import.ImportLH;
-import static com.wts.util.PropKit.getString;
-import static com.wts.util.PropKit.loadProps;
 
 public class Input {
-  public static void input() throws Exception {
-    String path = PropKit.class.getClassLoader().getResource("info.properties").getPath();
-    Properties properties=loadProps(path);
-    System.out.println("                 7、自动录入补贴             ");
-    System.out.println(" ");
-    System.out.println("993当前用户名：" + getString(properties, "userid") + "   密码：" + getString(properties, "passwd"));
+  public static void inputLH() throws Exception {
+
+    System.out.println("                 7、自动录入补贴（灵活就业）        ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
     System.out.println(" ");
@@ -62,16 +56,16 @@ public class Input {
       zzny = new BufferedReader(is_reader).readLine();
     } while (!zzny.matches("\\d{6}"));
 
-    if (Integer.parseInt(qsny)>Integer.parseInt(zzny)) {
-      System.out.print("起始年月"+qsny+"不能晚于终止年月"+zzny+"！");
+    if (Integer.parseInt(qsny) > Integer.parseInt(zzny)) {
+      System.out.print("起始年月" + qsny + "不能晚于终止年月" + zzny + "！");
       System.out.print("按回车关闭程序...");
       while (true) {
         if (System.in.read() == '\n')
           System.exit(0);
       }
     }
-    CloseableHttpClient client= login(getString(properties,"userid"),getString(properties,"passwd"));
-    List<PersonLH> persons =ImportLH(result);
-    ExportLHResult(client,persons,getString(properties,qsny),getString(properties,zzny));
+    CloseableHttpClient client = login(Common.userid, Common.passwd);
+    List<PersonLH> persons = ImportLH(result);
+    ExportLHResult(client, persons, qsny, zzny);
   }
 }

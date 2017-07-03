@@ -16,6 +16,8 @@ import java.net.URI;
 
 public class Common {
 
+  public static String userid="";
+  public static String passwd="";
   /**
    * 登录系统
    *

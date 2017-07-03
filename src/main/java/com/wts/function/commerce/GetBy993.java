@@ -1,5 +1,6 @@
 package com.wts.function.commerce;
 
+import com.wts.service.Common;
 import com.wts.util.Kit;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -113,8 +114,8 @@ public class GetBy993 {
             .setHost("10.153.50.108:7001")
             .setPath("/lemis3/logon.do")
             .setParameter("method", "doLogon")
-            .setParameter("userid", "hyzt")
-            .setParameter("passwd", Kit.getMD5("7957908"))
+            .setParameter("userid", Common.userid)
+            .setParameter("passwd", Kit.getMD5(Common.passwd))
             .setParameter("userLogSign", "0")
             .setParameter("passWordLogSign", "0")
             .setParameter("screenHeight", "768")
