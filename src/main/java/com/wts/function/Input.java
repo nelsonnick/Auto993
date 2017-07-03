@@ -15,7 +15,6 @@ import static com.wts.util.Import.ImportLH;
 
 public class Input {
   public static void inputLH() throws Exception {
-
     System.out.println(" ");
     System.out.println("                 7、自动录入补贴（灵活就业）        ");
     System.out.println(" ");
