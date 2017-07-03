@@ -694,6 +694,7 @@ public class IDKit {
     }
     return "档案年龄必须为8位数字!";
   }
+
   public static boolean checkfileAge(String number) {
     if (number.matches("\\d{8}")) {
       if (checkFileDate(number)) {
@@ -703,7 +704,25 @@ public class IDKit {
     }
     return false;
   }
+/**
+* 判断是否超龄，超龄返回TRUE
+ */
+public static boolean checkRetire(String number, String month) {
+  String birth = number.substring(6, 12);
+  if (getSex(number) == 1) {
+    if (Integer.parseInt(month) > Integer.parseInt(birth) + 6000) {
+      return true;
+    }
+  } else {
+    if (Integer.parseInt(month) > Integer.parseInt(birth) + 5000) {
+      return true;
+    }
+  }
+
+
+    return false;
+  }
   public static void main(String[] args) {
-    System.out.println(checkfileAge("20160101"));
+    System.out.println(checkRetire("370104198606282229","203606"));
   }
 }

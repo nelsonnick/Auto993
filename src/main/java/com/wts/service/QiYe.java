@@ -20,6 +20,7 @@ import static com.wts.function.security.Security.getDWMC;
 import static com.wts.function.security.Security.getSecurity;
 import static com.wts.service.Common.*;
 import static com.wts.util.IDKit.checkID_B;
+import static com.wts.util.IDKit.checkRetire;
 
 public class QiYe {
 
@@ -119,6 +120,10 @@ public class QiYe {
       System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(personQY.getGmsfhm(),qsny)) {
+      System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personQY.getGmsfhm()) || getCommerce(client, personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -154,6 +159,10 @@ public class QiYe {
       System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(personQY.getGmsfhm(),month)) {
+      System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personQY.getGmsfhm()) || getCommerce(client, personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -188,7 +197,10 @@ public class QiYe {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-
+    if (!checkRetire(gmsfhm,qsny)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -246,7 +258,10 @@ public class QiYe {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-
+    if (!checkRetire(gmsfhm,month)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -299,6 +314,10 @@ public class QiYe {
       System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
+    if (!checkRetire(personQY.getGmsfhm(),month)) {
+      System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personQY.getGmsfhm()) || getCommerce(client, personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
@@ -348,6 +367,10 @@ public class QiYe {
     if (!checkID_B(personQY.getGmsfhm())) {
       System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--身份证号码错误！");
       return "身份证号码错误！";
+    }
+    if (!checkRetire(personQY.getGmsfhm(),qsny)) {
+      System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
     }
     if (getCommerce(client, personQY.getGmsfhm()) || getCommerce(client, personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
@@ -404,6 +427,10 @@ public class QiYe {
       return "身份证号码错误！";
     }
 
+    if (!checkRetire(gmsfhm,month)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       System.out.println(gmsfhm + grxm + "--" + month + "存在未注销的工商信息！");
       return "存在未注销的工商信息！";
@@ -483,6 +510,10 @@ public class QiYe {
       return "身份证号码错误！";
     }
 
+    if (!checkRetire(gmsfhm,qsny)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       System.out.println(gmsfhm + grxm + "--存在未注销的工商信息！");
       return "存在未注销的工商信息！";

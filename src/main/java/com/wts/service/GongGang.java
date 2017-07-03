@@ -21,6 +21,7 @@ import static com.wts.function.security.Security.getSecurity;
 import static com.wts.service.Common.*;
 import static com.wts.service.Common.creatSubsidy;
 import static com.wts.util.IDKit.checkID_B;
+import static com.wts.util.IDKit.checkRetire;
 
 public class GongGang {
 
@@ -162,6 +163,10 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(personGG.getGmsfhm(),qsny)) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -197,6 +202,10 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(personGG.getGmsfhm(),month)) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -230,6 +239,11 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(gmsfhm,qsny)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
+
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -286,6 +300,11 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(gmsfhm,month)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
+
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -337,6 +356,10 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
+    if (!checkRetire(personGG.getGmsfhm(),month)) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
@@ -385,6 +408,10 @@ public class GongGang {
     if (!checkID_B(personGG.getGmsfhm())) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--身份证号码错误！");
       return "身份证号码错误！";
+    }
+    if (!checkRetire(personGG.getGmsfhm(),qsny)) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
@@ -439,7 +466,10 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-
+    if (!checkRetire(gmsfhm,month)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
@@ -510,7 +540,10 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "身份证号码错误！";
     }
-
+    if (!checkRetire(gmsfhm,qsny)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "存在未注销的工商信息！";
     }

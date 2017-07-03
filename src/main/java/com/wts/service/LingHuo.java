@@ -17,9 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.wts.function.commerce.Commerce.getCommerce;
+import static com.wts.function.security.Security.getSecurity;
+import static com.wts.function.security.Security.getYanglao;
+import static com.wts.function.security.Security.getYiliao;
 import static com.wts.service.Common.*;
 import static com.wts.service.Common.creatSubsidy;
 import static com.wts.util.IDKit.checkID_B;
+import static com.wts.util.IDKit.checkRetire;
 
 public class LingHuo {
 
@@ -160,6 +164,10 @@ public class LingHuo {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(personLH.getGmsfhm(),qsny)) {
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -189,6 +197,10 @@ public class LingHuo {
     if (!checkID_B(personLH.getGmsfhm())) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
+    }
+    if (!checkRetire(personLH.getGmsfhm(),month)) {
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
     }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
@@ -221,6 +233,10 @@ public class LingHuo {
     if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
+    }
+    if (!checkRetire(gmsfhm,qsny)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
     }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
@@ -271,6 +287,10 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
+    if (!checkRetire(gmsfhm,month)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
@@ -320,6 +340,10 @@ public class LingHuo {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
+    if (!checkRetire(personLH.getGmsfhm(),month)) {
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
@@ -344,6 +368,16 @@ public class LingHuo {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
+
+
+    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),month)))){
+      return "养老补贴金额错误！";
+    }
+    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),month)))){
+      return "医疗补贴金额错误！";
+    }
+
+
     String save = saveSubsidy(client, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), month, month, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
@@ -367,7 +401,10 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-
+    if (!checkRetire(gmsfhm,month)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       System.out.println(gmsfhm + grxm + "--" + month + "存在未注销的工商信息！");
       return "存在未注销的工商信息！";
@@ -416,6 +453,15 @@ public class LingHuo {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
+
+    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,month)))){
+      return "养老补贴金额错误！";
+    }
+    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,month)))){
+      return "医疗补贴金额错误！";
+    }
+
+
     String save = saveSubsidy(client, gmsfhm, grbh, djlsh, month, month, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
       System.out.println(gmsfhm + grxm + "--" + month + save);
@@ -439,6 +485,10 @@ public class LingHuo {
     if (!checkID_B(personLH.getGmsfhm())) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--身份证号码错误！");
       return "身份证号码错误！";
+    }
+    if (!checkRetire(personLH.getGmsfhm(),qsny)) {
+      System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
+      return "无法录入：已超龄！";
     }
     if (getCommerce(client, personLH.getGmsfhm()) || getCommerce(client, personLH.getGmsfhm().substring(0, 6) + personLH.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
@@ -464,6 +514,15 @@ public class LingHuo {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
+
+
+    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),qsny)))){
+      return "养老补贴金额错误！";
+    }
+    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),qsny)))){
+      return "医疗补贴金额错误！";
+    }
+
     String save = saveSubsidy(client, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), qsny, zzny, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
@@ -488,7 +547,10 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--" + "身份证号码错误！");
       return "身份证号码错误！";
     }
-
+    if (!checkRetire(gmsfhm,qsny)) {
+      System.out.println(gmsfhm + grxm + "--已超龄！");
+      return "无法录入：已超龄！";
+    }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
       System.out.println(gmsfhm + grxm + "--存在未注销的工商信息！");
       return "存在未注销的工商信息！";
@@ -536,6 +598,16 @@ public class LingHuo {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
+
+    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,qsny)))){
+        System.out.println(gmsfhm + grxm + "--养老补贴金额错误！");
+      return "养老补贴金额错误！";
+    }
+    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,qsny)))){
+      System.out.println(gmsfhm + grxm + "--医疗补贴金额错误！");
+      return "医疗补贴金额错误！";
+    }
+
     String save = saveSubsidy(client, gmsfhm, grbh, djlsh, qsny, zzny, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
       System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + save);
