@@ -21,6 +21,7 @@ public class Jnjgfw {
    */
   public static void analysis() throws Exception {
 
+    System.out.println(" ");
     System.out.println("               3、分析工商信息         ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
@@ -144,6 +145,8 @@ public class Jnjgfw {
    * @throws Exception
    */
   public static void download() throws Exception {
+
+    System.out.println(" ");
     System.out.println("               2、下载工商信息         ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");

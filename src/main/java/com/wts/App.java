@@ -1,21 +1,16 @@
 package com.wts;
 
 
-import com.wts.function.Input;
-import com.wts.function.Settings;
 import com.wts.service.Common;
-import com.wts.util.PropKit;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Properties;
-
-import static com.wts.util.PropKit.getString;
-import static com.wts.util.PropKit.loadProps;
 
 public class App {
   public static void main(String[] args) throws Exception {
-
+    System.out.println(" ");
+    System.out.println("                        欢迎使用自动993_v3.0版");
+    System.out.println(" ");
     String userid,passwd;
     do {
       System.out.print("请输入您在993系统中的用户名：");
@@ -30,19 +25,18 @@ public class App {
     Common.userid=userid;
     Common.passwd=passwd;
 
-    System.out.println("                        欢迎使用自动993程序");
-    System.out.println(" ");
+
     System.out.println("993当前用户名：" + Common.userid + "   密码：" + Common.passwd);
     System.out.println(" ");
-    System.out.println("本程序提供如下功能：");
+    System.out.println("本程序提供目前提供的功能有：");
     System.out.println(" ");
-    System.out.println("1、核查工商信息--网络：内");
-    System.out.println("2、下载工商信息--网络：外");
-    System.out.println("3、分析工商信息--网络：外");
-    System.out.println("4、核查社保信息--网络：内");
-    System.out.println("5、下载社保信息--网络：内");
-    System.out.println("6、分析社保信息--网络：内");
-    System.out.println("7、自动录入补贴（灵活就业）--网络：内");
+    System.out.println("1、核查工商信息--内网");
+    System.out.println("2、下载工商信息--外网");
+    System.out.println("3、分析工商信息--外网");
+    System.out.println("4、核查社保信息--内网");
+    System.out.println("5、下载社保信息--内网");
+    System.out.println("6、分析社保信息--内网");
+    System.out.println("7、自动录入补贴（灵活就业）--内网");
     System.out.println(" ");
     String result;
     do {

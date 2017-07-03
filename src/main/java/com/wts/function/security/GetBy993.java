@@ -141,6 +141,8 @@ public class GetBy993 {
   }
 
   public static void get() throws Exception {
+
+    System.out.println(" ");
     System.out.println("               4、核查社保信息         ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");

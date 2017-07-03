@@ -1,5 +1,5 @@
 @echo off
-title ×Ô¶¯»¯993-3.0°æ
+title Auto993_v3.0
 color 3f
 :begin
 java -version

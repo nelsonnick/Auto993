@@ -20,6 +20,7 @@ public class Ggywzxt {
    */
   public static void analysis() throws Exception {
 
+    System.out.println(" ");
     System.out.println("               6、分析社保信息         ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
@@ -160,6 +161,8 @@ public class Ggywzxt {
    * @throws Exception
    */
   public static void download() throws Exception {
+
+    System.out.println(" ");
     System.out.println("               5、下载社保信息         ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
