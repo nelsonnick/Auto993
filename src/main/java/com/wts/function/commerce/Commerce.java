@@ -1,4 +1,4 @@
-package com.wts.check.commerce;
+package com.wts.function.commerce;
 
 import com.wts.util.Kit;
 import net.sf.json.JSONArray;

@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wts.check.commerce.Commerce.getCommerce;
+import static com.wts.function.commerce.Commerce.getCommerce;
 import static com.wts.service.Common.*;
 import static com.wts.service.Common.creatSubsidy;
 import static com.wts.util.IDKit.checkID_B;
@@ -530,7 +530,6 @@ public class LingHuo {
     //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);
     String yiliaobz = "", yanglaobz = "", sfyxyq = "", sfyxffylbt = "", sfyxffyilbt = "";
-
     JSONObject jsStr = jsStrs.getJSONObject(0);
     yiliaobz = jsStr.getString("yiliaobz");
     yanglaobz = jsStr.getString("yanglaobz");

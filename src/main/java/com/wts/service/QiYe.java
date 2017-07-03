@@ -15,9 +15,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wts.check.commerce.Commerce.getCommerce;
-import static com.wts.check.security.Security.getDWMC;
-import static com.wts.check.security.Security.getSecurity;
+import static com.wts.function.commerce.Commerce.getCommerce;
+import static com.wts.function.security.Security.getDWMC;
+import static com.wts.function.security.Security.getSecurity;
 import static com.wts.service.Common.*;
 import static com.wts.util.IDKit.checkID_B;
 

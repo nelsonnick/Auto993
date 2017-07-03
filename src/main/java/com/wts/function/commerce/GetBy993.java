@@ -1,7 +1,5 @@
-package com.wts.check.commerce;
+package com.wts.function.commerce;
 
-
-import com.wts.App;
 import com.wts.util.Kit;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -80,7 +78,6 @@ public class GetBy993 {
   }
 
   public static void get() throws Exception {
-    Runtime.getRuntime().exec("cls");
     System.out.println("                 1、核查工商信息             ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
@@ -109,87 +106,79 @@ public class GetBy993 {
       System.out.print("请输入待查的Excel文件名：");
       InputStreamReader is_reader = new InputStreamReader(System.in);
       result = new BufferedReader(is_reader).readLine();
-    } while (result.equals("")); // 当用户输入无效的时候，反复提示要求用户输入
-    File file = new File("C:\\" + result + ".xlsx");
-    if (!file.exists()) {
-      System.out.print("C:\\" + result + ".xlsx文件不存在！");
-      System.out.print("按回车关闭程序...");
-      while (true) {
-        if (System.in.read() == '\n')
-          System.exit(0);
-      }
-    } else {
-      URI loginUri = new URIBuilder()
-              .setScheme("http")
-              .setHost("10.153.50.108:7001")
-              .setPath("/lemis3/logon.do")
-              .setParameter("method", "doLogon")
-              .setParameter("userid", "hyzt")
-              .setParameter("passwd", Kit.getMD5("7957908"))
-              .setParameter("userLogSign", "0")
-              .setParameter("passWordLogSign", "0")
-              .setParameter("screenHeight", "768")
-              .setParameter("screenWidth", "1024")
-              .setParameter("mode", "")
-              .build();
-      HttpPost login_post = new HttpPost(loginUri);
-      // 创建默认的httpClient实例.
-      CloseableHttpClient login_httpclient = HttpClients.createDefault();
-      CloseableHttpResponse login_response = login_httpclient.execute(login_post);
-      HttpEntity login_entity = login_response.getEntity();
-      if (login_entity != null) {
-        System.out.println("  ");
-        System.out.println("是否成功接入工商数据库: " + EntityUtils.toString(login_entity, "UTF-8"));
-      }
-      System.out.println("1秒后开始抓取数据....");
-      Thread.sleep(1000);
-      System.out.println("开始抓取....");
-      XSSFWorkbook workbookAfter = new XSSFWorkbook();
-      XSSFSheet sheetAfter = workbookAfter.createSheet("sheet1");
-      XSSFWorkbook workbookBefore = new XSSFWorkbook(new FileInputStream("c:\\" + result + ".xlsx"));
-      XSSFSheet sheetBefore = workbookBefore.getSheetAt(0);
-      XSSFRow rowAfter = sheetAfter.createRow(0);
-      int count = sheetBefore.getRow(0).getPhysicalNumberOfCells();
-      int total = sheetBefore.getLastRowNum();
-      for (int j = 0; j < count; j++) {
-        rowAfter.createCell(j).setCellValue(sheetBefore.getRow(0).getCell(j).toString());
-      }
-      rowAfter.createCell(count).setCellValue("个人姓名");
-      rowAfter.createCell(count + 1).setCellValue("单位名称");
-      rowAfter.createCell(count + 2).setCellValue("注册号");
-      rowAfter.createCell(count + 3).setCellValue("成立日期");
-      rowAfter.createCell(count + 4).setCellValue("注销日期");
-      rowAfter.createCell(count + 5).setCellValue("吊销日期");
-      rowAfter.createCell(count + 6).setCellValue("人员身份");
-      rowAfter.createCell(count + 7).setCellValue("联系电话");
-      rowAfter.createCell(count + 8).setCellValue("登记机关");
+    } while (!new File("C:\\" + result + ".xlsx").exists()); // 当用户输入无效的时候，反复提示要求用户输入
 
-      for (int i = 1; i < total + 1; i++) {
-        String personNumber = sheetBefore.getRow(i).getCell(0).getStringCellValue();
-        System.out.println("正在抓取第" + i + "行人员，身份证号码为：" + personNumber);
-        if (personNumber.length() >= 17) {
-          send(login_httpclient, sheetBefore, sheetAfter, count, i, personNumber);
-          String personNumber15 = personNumber.substring(0, 6) + personNumber.substring(8, 17);
-          send(login_httpclient, sheetBefore, sheetAfter, count, i, personNumber15);
-        } else {
-          send(login_httpclient, sheetBefore, sheetAfter, count, i, personNumber);
-        }
-      }
-      login_response.close();
-      login_httpclient.close();
-      FileOutputStream os = new FileOutputStream("c:\\" + result + "_工商数据抓取后.xlsx");
-      workbookAfter.write(os);
-      os.close();
+    URI loginUri = new URIBuilder()
+            .setScheme("http")
+            .setHost("10.153.50.108:7001")
+            .setPath("/lemis3/logon.do")
+            .setParameter("method", "doLogon")
+            .setParameter("userid", "hyzt")
+            .setParameter("passwd", Kit.getMD5("7957908"))
+            .setParameter("userLogSign", "0")
+            .setParameter("passWordLogSign", "0")
+            .setParameter("screenHeight", "768")
+            .setParameter("screenWidth", "1024")
+            .setParameter("mode", "")
+            .build();
+    HttpPost login_post = new HttpPost(loginUri);
+    // 创建默认的httpClient实例.
+    CloseableHttpClient login_httpclient = HttpClients.createDefault();
+    CloseableHttpResponse login_response = login_httpclient.execute(login_post);
+    HttpEntity login_entity = login_response.getEntity();
+    if (login_entity != null) {
       System.out.println("  ");
-      System.out.println("  ");
-      System.out.println("工商数据抓取完成！");
-      System.out.println("请查看文件--> c:\\" + result + "_工商数据抓取后.xlsx");
-      System.out.println("  ");
-      System.out.println("按回车键返回主菜单...");
-      while (true) {
-        if (System.in.read() == '\n')
-          System.exit(0);
+      System.out.println("是否成功接入工商数据库: " + EntityUtils.toString(login_entity, "UTF-8"));
+    }
+    System.out.println("1秒后开始抓取数据....");
+    Thread.sleep(1000);
+    System.out.println("开始抓取....");
+    XSSFWorkbook workbookAfter = new XSSFWorkbook();
+    XSSFSheet sheetAfter = workbookAfter.createSheet("sheet1");
+    XSSFWorkbook workbookBefore = new XSSFWorkbook(new FileInputStream("c:\\" + result + ".xlsx"));
+    XSSFSheet sheetBefore = workbookBefore.getSheetAt(0);
+    XSSFRow rowAfter = sheetAfter.createRow(0);
+    int count = sheetBefore.getRow(0).getPhysicalNumberOfCells();
+    int total = sheetBefore.getLastRowNum();
+    for (int j = 0; j < count; j++) {
+      rowAfter.createCell(j).setCellValue(sheetBefore.getRow(0).getCell(j).toString());
+    }
+    rowAfter.createCell(count).setCellValue("个人姓名");
+    rowAfter.createCell(count + 1).setCellValue("单位名称");
+    rowAfter.createCell(count + 2).setCellValue("注册号");
+    rowAfter.createCell(count + 3).setCellValue("成立日期");
+    rowAfter.createCell(count + 4).setCellValue("注销日期");
+    rowAfter.createCell(count + 5).setCellValue("吊销日期");
+    rowAfter.createCell(count + 6).setCellValue("人员身份");
+    rowAfter.createCell(count + 7).setCellValue("联系电话");
+    rowAfter.createCell(count + 8).setCellValue("登记机关");
+
+    for (int i = 1; i < total + 1; i++) {
+      String personNumber = sheetBefore.getRow(i).getCell(0).getStringCellValue();
+      System.out.println("正在抓取第" + i + "行人员，身份证号码为：" + personNumber);
+      if (personNumber.length() >= 17) {
+        send(login_httpclient, sheetBefore, sheetAfter, count, i, personNumber);
+        String personNumber15 = personNumber.substring(0, 6) + personNumber.substring(8, 17);
+        send(login_httpclient, sheetBefore, sheetAfter, count, i, personNumber15);
+      } else {
+        send(login_httpclient, sheetBefore, sheetAfter, count, i, personNumber);
       }
     }
+    login_response.close();
+    login_httpclient.close();
+    FileOutputStream os = new FileOutputStream("c:\\" + result + "_工商数据抓取后.xlsx");
+    workbookAfter.write(os);
+    os.close();
+    System.out.println("  ");
+    System.out.println("  ");
+    System.out.println("工商数据抓取完成！");
+    System.out.println("请查看文件--> c:\\" + result + "_工商数据抓取后.xlsx");
+    System.out.println("  ");
+    System.out.println("按回车键返回主菜单...");
+    while (true) {
+      if (System.in.read() == '\n')
+        System.exit(0);
+    }
+
   }
 }

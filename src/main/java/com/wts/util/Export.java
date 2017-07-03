@@ -359,33 +359,12 @@ public class Export {
    * @param zzny    终止年月
    */
   public static void ExportQYResult(CloseableHttpClient client, List<PersonQY> persons, String qsny, String zzny) throws Exception {
-    String fileName = "c:\\" + qsny + "-" + zzny + "企业吸纳录入结果" + ".xlsx";
-    CreateResult(fileName);
+    Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
     for (int i = 1; i < persons.size() + 1; i++) {
-      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
-      XSSFSheet sheet = workbook.getSheetAt(0);
-      XSSFRow rowNew = sheet.createRow(i);
-      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
-      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      String result = QiYe.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), qsny, zzny);
-      if (result.indexOf("补贴生成错误，请人工核查！原因为") > 0) {
-        rowNew.createCell(2).setCellValue(result + "---尝试分月录入");
-        FileOutputStream os = new FileOutputStream(fileName);
-        workbook.write(os);
-        os.close();
-        Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
-        ExportQYResult(client, persons.get(i - 1), qsny, qsny);//第一个月
-        for (int j = 1; j < jgys + 1; j++) {
-          String zjny = Integer.parseInt(qsny) + j + "";
-          ExportQYResult(client, persons.get(i - 1), zjny, zjny);//第N个月
-        }
-      } else {
-        rowNew.createCell(2).setCellValue(result);
-        FileOutputStream os = new FileOutputStream(fileName);
-        workbook.write(os);
-        os.close();
+      for (int j = 0; j < jgys + 1; j++) {
+        String zjny = Integer.parseInt(qsny) + j + "";
+        ExportQYResult(client, persons.get(i - 1), zjny, zjny);//第N个月
       }
-
     }
     System.out.println("请查看结果");
   }
@@ -447,33 +426,12 @@ public class Export {
    * @param zzny    终止年月
    */
   public static void ExportGGResult(CloseableHttpClient client, List<PersonGG> persons, String qsny, String zzny) throws Exception {
-    String fileName = "c:\\" + qsny + "-" + zzny + "公益岗位录入结果" + ".xlsx";
-    CreateResult(fileName);
+    Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
     for (int i = 1; i < persons.size() + 1; i++) {
-      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
-      XSSFSheet sheet = workbook.getSheetAt(0);
-      XSSFRow rowNew = sheet.createRow(i);
-      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
-      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      String result = GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), qsny, zzny);
-      if (result.indexOf("补贴生成错误，请人工核查！原因为") > 0) {
-        rowNew.createCell(2).setCellValue(result + "---尝试分月录入");
-        FileOutputStream os = new FileOutputStream(fileName);
-        workbook.write(os);
-        os.close();
-        Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
-        ExportGGResult(client, persons.get(i - 1), qsny, qsny);//第一个月
-        for (int j = 1; j < jgys + 1; j++) {
-          String zjny = Integer.parseInt(qsny) + j + "";
-          ExportGGResult(client, persons.get(i - 1), zjny, zjny);//第N个月
-        }
-      } else {
-        rowNew.createCell(2).setCellValue(result);
-        FileOutputStream os = new FileOutputStream(fileName);
-        workbook.write(os);
-        os.close();
+      for (int j = 0; j < jgys + 1; j++) {
+        String zjny = Integer.parseInt(qsny) + j + "";
+        ExportGGResult(client, persons.get(i - 1), zjny, zjny);//第N个月
       }
-
     }
     System.out.println("请查看结果");
   }
@@ -535,31 +493,11 @@ public class Export {
    * @param zzny    终止年月
    */
   public static void ExportLHResult(CloseableHttpClient client, List<PersonLH> persons, String qsny, String zzny) throws Exception {
-    String fileName = "c:\\" + qsny + "-" + zzny + "灵活就业录入结果" + ".xlsx";
-    CreateResult(fileName);
+    Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
     for (int i = 1; i < persons.size() + 1; i++) {
-      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
-      XSSFSheet sheet = workbook.getSheetAt(0);
-      XSSFRow rowNew = sheet.createRow(i);
-      rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
-      rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      String result = LingHuo.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), qsny, zzny);
-      if (result.indexOf("补贴生成错误，请人工核查！原因为") > 0) {
-        rowNew.createCell(2).setCellValue(result + "---尝试分月录入");
-        FileOutputStream os = new FileOutputStream(fileName);
-        workbook.write(os);
-        os.close();
-        Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
-        ExportLHResult(client, persons.get(i - 1), qsny, qsny);//第一个月
-        for (int j = 1; j < jgys + 1; j++) {
-          String zjny = Integer.parseInt(qsny) + j + "";
-          ExportLHResult(client, persons.get(i - 1), zjny, zjny);//第N个月
-        }
-      } else {
-        rowNew.createCell(2).setCellValue(result);
-        FileOutputStream os = new FileOutputStream(fileName);
-        workbook.write(os);
-        os.close();
+      for (int j = 0; j < jgys + 1; j++) {
+        String zjny = Integer.parseInt(qsny) + j + "";
+        ExportLHResult(client, persons.get(i - 1), zjny, zjny);//第N个月
       }
     }
     System.out.println("请查看结果");
