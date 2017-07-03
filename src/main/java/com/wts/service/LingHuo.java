@@ -149,13 +149,13 @@ public class LingHuo {
   /**
    * 检查补贴录入情况
    *
-   * @param client     登陆后的client
-   * @param personLH   PersonLH的实例
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client   登陆后的client
+   * @param personLH PersonLH的实例
+   * @param qsny     起始年月
+   * @param zzny     终止年月
    * @return 提示字符串
    */
-  public static String check(CloseableHttpClient client, PersonLH personLH, String startMonth, String endMonth) throws Exception {
+  public static String check(CloseableHttpClient client, PersonLH personLH, String qsny, String zzny) throws Exception {
     if (!checkID_B(personLH.getGmsfhm())) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
@@ -170,11 +170,11 @@ public class LingHuo {
     if (syys.equals("0")) {
       return "无法录入：剩余补贴月数为零！";
     }
-    String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), qsny, zzny, syys);
     if (creat.equals("[]")) {
-      return "无法录入：" + startMonth + "-" + endMonth + "的补贴，请人工核查";
+      return "无法录入：" + qsny + "-" + zzny + "的补贴，请人工核查";
     }
-    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + startMonth + "-" + endMonth + "补贴未录入";
+    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + qsny + "-" + zzny + "补贴未录入";
   }
 
   /**
@@ -210,14 +210,14 @@ public class LingHuo {
   /**
    * 检查补贴录入情况
    *
-   * @param client     登陆后的client
-   * @param grxm       个人姓名
-   * @param gmsfhm     公民身份号码
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client 登陆后的client
+   * @param grxm   个人姓名
+   * @param gmsfhm 公民身份号码
+   * @param qsny   起始年月
+   * @param zzny   终止年月
    * @return 提示字符串
    */
-  public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String startMonth, String endMonth) throws Exception {
+  public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String qsny, String zzny) throws Exception {
     if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
@@ -249,12 +249,12 @@ public class LingHuo {
       return "无法录入：剩余补贴月数为零！";
     }
     //System.out.println(syys);
-    String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
 
-    return gmsfhm + grxm + "--" + startMonth + "-" + endMonth + "补贴未录入";
+    return gmsfhm + grxm + "--" + qsny + "-" + zzny + "补贴未录入";
   }
 
   /**
@@ -428,13 +428,13 @@ public class LingHuo {
   /**
    * 保存
    *
-   * @param client     登陆后的client
-   * @param personLH   PersonLH的实例
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client   登陆后的client
+   * @param personLH PersonLH的实例
+   * @param qsny     起始年月
+   * @param zzny     终止年月
    * @return 提示字符串
    */
-  public static String save(CloseableHttpClient client, PersonLH personLH, String startMonth, String endMonth) throws Exception {
+  public static String save(CloseableHttpClient client, PersonLH personLH, String qsny, String zzny) throws Exception {
 
     if (!checkID_B(personLH.getGmsfhm())) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--身份证号码错误！");
@@ -450,9 +450,9 @@ public class LingHuo {
     if (syys.equals("0")) {
       return "剩余补贴月数为零！";
     }
-    String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 3, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
 
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -464,25 +464,25 @@ public class LingHuo {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
-    String save = saveSubsidy(client, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), startMonth, endMonth, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
+    String save = saveSubsidy(client, personLH.getGmsfhm(), personLH.getGrbh(), personLH.getDjlsh(), qsny, zzny, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
     }
-    System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + startMonth + "-" + endMonth + "补贴录入成功！");
-    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + startMonth + "-" + endMonth + "补贴录入成功！";
+    System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + qsny + "-" + zzny + "补贴录入成功！");
+    return personLH.getGmsfhm() + personLH.getGrxm() + "--" + qsny + "-" + zzny + "补贴录入成功！";
   }
 
   /**
    * 保存
    *
-   * @param client     登陆后的client
-   * @param grxm       个人姓名
-   * @param gmsfhm     公民身份号码
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client 登陆后的client
+   * @param grxm   个人姓名
+   * @param gmsfhm 公民身份号码
+   * @param qsny   起始年月
+   * @param zzny   终止年月
    * @return 提示字符串
    */
-  public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String startMonth, String endMonth) throws Exception {
+  public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String qsny, String zzny) throws Exception {
 
     if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--" + "身份证号码错误！");
@@ -522,10 +522,10 @@ public class LingHuo {
       return "剩余补贴月数为零！";
     }
     //System.out.println(syys);
-    String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 3, gmsfhm, grbh, djlsh, qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      System.out.println(gmsfhm + grxm + "--" + startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat);
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat);
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
     //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -537,13 +537,13 @@ public class LingHuo {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
-    String save = saveSubsidy(client, gmsfhm, grbh, djlsh, startMonth, endMonth, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
+    String save = saveSubsidy(client, gmsfhm, grbh, djlsh, qsny, zzny, syys, yanglaobz, yiliaobz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
-      System.out.println(gmsfhm + grxm + "--" + startMonth + "-" + endMonth + save);
+      System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + save);
       return save;
     }
-    System.out.println(gmsfhm + grxm + "--" + startMonth + "-" + endMonth + "补贴录入成功！");
-    return startMonth + "-" + endMonth + "补贴录入成功！";
+    System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + "补贴录入成功！");
+    return qsny + "-" + zzny + "补贴录入成功！";
   }
 
 }

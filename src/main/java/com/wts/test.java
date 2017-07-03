@@ -18,6 +18,6 @@ public class test {
     Properties properties=loadProps(PropKit.class.getClassLoader().getResource("info.properties").getPath());
     CloseableHttpClient client= login(getString(properties,"userid"),getString(properties,"passwd"));
     List<PersonLH> persons =ImportLH(getString(properties,"result"));
-    ExportLHResult(client,persons,getString(properties,"month"));
+    ExportLHResult(client,persons,getString(properties,"qsny"),getString(properties,"zzny"));
   }
 }

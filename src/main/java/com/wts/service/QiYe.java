@@ -108,13 +108,13 @@ public class QiYe {
   /**
    * 检查补贴录入情况
    *
-   * @param client     登陆后的client
-   * @param personQY   PersonQY的实例
-   * @param startMonth 要检查的月份
-   * @param endMonth   要检查的月份
+   * @param client   登陆后的client
+   * @param personQY PersonQY的实例
+   * @param qsny     起始年月
+   * @param zzny     终止年月
    * @return 提示字符串
    */
-  public static String check(CloseableHttpClient client, PersonQY personQY, String startMonth, String endMonth) throws Exception {
+  public static String check(CloseableHttpClient client, PersonQY personQY, String qsny, String zzny) throws Exception {
     if (!checkID_B(personQY.getGmsfhm())) {
       System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
@@ -122,11 +122,11 @@ public class QiYe {
     if (getCommerce(client, personQY.getGmsfhm()) || getCommerce(client, personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
-    Element element = getSecurity(personQY.getGmsfhm(), startMonth);
+    Element element = getSecurity(personQY.getGmsfhm(), qsny);
     if (!personQY.getDwmc().equals(getDWMC(element))) {
       return "无法录入：起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(personQY.getGmsfhm(), endMonth);
+    Element element2 = getSecurity(personQY.getGmsfhm(), zzny);
     if (!personQY.getDwmc().equals(getDWMC(element2))) {
       return "无法录入：终止月份单位名称不一致！";
     }
@@ -134,11 +134,11 @@ public class QiYe {
     if (syys.equals("0")) {
       return "无法录入：剩余补贴月数为零！";
     }
-    String creat = creatSubsidy(client, 1, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 1, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
-    return personQY.getGmsfhm() + personQY.getGrxm() + "--" + startMonth + "-" + endMonth + "补贴未录入";
+    return personQY.getGmsfhm() + personQY.getGrxm() + "--" + qsny + "-" + zzny + "补贴未录入";
   }
 
   /**
@@ -175,14 +175,14 @@ public class QiYe {
   /**
    * 检查补贴录入情况
    *
-   * @param client     登陆后的client
-   * @param grxm       个人姓名
-   * @param gmsfhm     公民身份号码
-   * @param startMonth 要检查的月份
-   * @param endMonth   要检查的月份
+   * @param client 登陆后的client
+   * @param grxm   个人姓名
+   * @param gmsfhm 公民身份号码
+   * @param qsny   起始年月
+   * @param zzny   终止年月
    * @return 提示字符串
    */
-  public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String startMonth, String endMonth) throws Exception {
+  public static String check(CloseableHttpClient client, String grxm, String gmsfhm, String qsny, String zzny) throws Exception {
 
     if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
@@ -209,11 +209,11 @@ public class QiYe {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, startMonth);
+    Element element = getSecurity(gmsfhm, qsny);
     if (!dwmc.equals(getDWMC(element))) {
       return "无法录入：起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(gmsfhm, endMonth);
+    Element element2 = getSecurity(gmsfhm, zzny);
     if (!dwmc.equals(getDWMC(element2))) {
       return "无法录入：终止月份单位名称不一致！";
     }
@@ -223,12 +223,12 @@ public class QiYe {
       return "无法录入：剩余补贴月数为零！";
     }
     //System.out.println(syys);
-    String creat = creatSubsidy(client, 1, gmsfhm, grbh, djlsh, startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 1, gmsfhm, grbh, djlsh, qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
 
-    return gmsfhm + grxm + "--" + startMonth + "-" + endMonth + "补贴未录入";
+    return gmsfhm + grxm + "--" + qsny + "-" + zzny + "补贴未录入";
   }
 
   /**
@@ -337,13 +337,13 @@ public class QiYe {
   /**
    * 保存
    *
-   * @param client     登陆后的client
-   * @param personQY   PersonQY的实例
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client   登陆后的client
+   * @param personQY PersonQY的实例
+   * @param qsny     起始年月
+   * @param zzny     终止年月
    * @return 提示字符串
    */
-  public static String save(CloseableHttpClient client, PersonQY personQY, String startMonth, String endMonth) throws Exception {
+  public static String save(CloseableHttpClient client, PersonQY personQY, String qsny, String zzny) throws Exception {
 
     if (!checkID_B(personQY.getGmsfhm())) {
       System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--身份证号码错误！");
@@ -352,11 +352,11 @@ public class QiYe {
     if (getCommerce(client, personQY.getGmsfhm()) || getCommerce(client, personQY.getGmsfhm().substring(0, 6) + personQY.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
-    Element element = getSecurity(personQY.getGmsfhm(), startMonth);
+    Element element = getSecurity(personQY.getGmsfhm(), qsny);
     if (!personQY.getDwmc().equals(getDWMC(element))) {
       return "起始年月单位名称不一致！";
     }
-    Element element2 = getSecurity(personQY.getGmsfhm(), endMonth);
+    Element element2 = getSecurity(personQY.getGmsfhm(), zzny);
     if (!personQY.getDwmc().equals(getDWMC(element2))) {
       return "终止年月单位名称不一致！";
     }
@@ -364,9 +364,9 @@ public class QiYe {
     if (syys.equals("0")) {
       return "剩余补贴月数为零！";
     }
-    String creat = creatSubsidy(client, 1, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 1, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
 
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -380,12 +380,12 @@ public class QiYe {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
-    String save = saveSubsidy(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), startMonth, endMonth, syys, yanglaobz, yiliaobz, shiyebz, gangweibz, sfyxyq, sfyxffylbt, sfyxffyilbt);
+    String save = saveSubsidy(client, personQY.getGmsfhm(), personQY.getGrbh(), personQY.getDjlsh(), qsny, zzny, syys, yanglaobz, yiliaobz, shiyebz, gangweibz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
       return "保存错误，提示信息为：" + save;
     }
-    System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--" + startMonth + "-" + endMonth + "补贴录入成功！");
-    return personQY.getGmsfhm() + personQY.getGrxm() + "--" + startMonth + "-" + endMonth + "补贴录入成功！";
+    System.out.println(personQY.getGmsfhm() + personQY.getGrxm() + "--" + qsny + "-" + zzny + "补贴录入成功！");
+    return personQY.getGmsfhm() + personQY.getGrxm() + "--" + qsny + "-" + zzny + "补贴录入成功！";
   }
 
   /**
@@ -469,14 +469,14 @@ public class QiYe {
   /**
    * 保存
    *
-   * @param client     登陆后的client
-   * @param grxm       个人姓名
-   * @param gmsfhm     公民身份号码
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client 登陆后的client
+   * @param grxm   个人姓名
+   * @param gmsfhm 公民身份号码
+   * @param qsny   起始年月
+   * @param zzny   终止年月
    * @return 提示字符串
    */
-  public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String startMonth, String endMonth) throws Exception {
+  public static String save(CloseableHttpClient client, String grxm, String gmsfhm, String qsny, String zzny) throws Exception {
 
     if (!checkID_B(gmsfhm)) {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
@@ -507,14 +507,14 @@ public class QiYe {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, startMonth);
+    Element element = getSecurity(gmsfhm, qsny);
     if (!dwmc.equals(getDWMC(element))) {
-      System.out.println(gmsfhm + grxm + "--" + startMonth + "单位名称不一致！");
+      System.out.println(gmsfhm + grxm + "--" + qsny + "单位名称不一致！");
       return "起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(gmsfhm, endMonth);
+    Element element2 = getSecurity(gmsfhm, zzny);
     if (!dwmc.equals(getDWMC(element2))) {
-      System.out.println(gmsfhm + grxm + "--" + endMonth + "单位名称不一致！");
+      System.out.println(gmsfhm + grxm + "--" + zzny + "单位名称不一致！");
       return "终止月份单位名称不一致！";
     }
     //System.out.println(dwmc);
@@ -524,10 +524,10 @@ public class QiYe {
       return "剩余补贴月数为零！";
     }
     //System.out.println(syys);
-    String creat = creatSubsidy(client, 1, gmsfhm, grbh, djlsh, startMonth, endMonth, syys);
+    String creat = creatSubsidy(client, 1, gmsfhm, grbh, djlsh, qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
-      System.out.println(gmsfhm + grxm + "--" + startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat);
-      return startMonth + "-" + endMonth + "的补贴生成错误，请人工核查！原因为：" + creat;
+      System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat);
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
     //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -541,13 +541,13 @@ public class QiYe {
     sfyxyq = jsStr.getString("sfyxyq");
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
-    String save = saveSubsidy(client, gmsfhm, grbh, djlsh, startMonth, endMonth, syys, yanglaobz, yiliaobz, shiyebz, gangweibz, sfyxyq, sfyxffylbt, sfyxffyilbt);
+    String save = saveSubsidy(client, gmsfhm, grbh, djlsh, qsny, zzny, syys, yanglaobz, yiliaobz, shiyebz, gangweibz, sfyxyq, sfyxffylbt, sfyxffyilbt);
     if (!save.equals("保存成功！")) {
-      System.out.println(gmsfhm + grxm + "--" + startMonth + "-" + endMonth + save);
+      System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + save);
       return save;
     }
-    System.out.println(gmsfhm + grxm + "--" + startMonth + "-" + endMonth + "补贴录入成功！");
-    return startMonth + "-" + endMonth + "补贴录入成功！";
+    System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + "补贴录入成功！");
+    return qsny + "-" + zzny + "补贴录入成功！";
   }
 
 }

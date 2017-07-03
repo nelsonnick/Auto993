@@ -9,10 +9,30 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.List;
 
 public class Export {
+
+  /**
+   * 创建导出基本表
+   */
+  public static void CreateResult(String fileName) throws Exception {
+    if (!new File(fileName).exists()) {
+      XSSFWorkbook workbook = new XSSFWorkbook();
+      XSSFSheet sheet = workbook.createSheet("sheet1");
+      XSSFRow row = sheet.createRow(0);
+      row.createCell(0).setCellValue("公民身份号码");
+      row.createCell(1).setCellValue("个人姓名");
+      row.createCell(2).setCellValue("结果");
+      FileOutputStream os = new FileOutputStream(fileName);
+      workbook.write(os);
+      os.close();
+    }
+  }
+
   /**
    * 导出企业人员名单
    *
@@ -302,35 +322,72 @@ public class Export {
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
       rowNew.createCell(2).setCellValue(QiYe.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
-    FileOutputStream os = new FileOutputStream("c:\\" + month + "企业吸纳录入结果" + ".xlsx");
+    FileOutputStream os = new FileOutputStream("c:\\" + month + "-" + month + "企业吸纳录入结果" + ".xlsx");
     workbook.write(os);
     os.close();
   }
 
   /**
-   * 导出企业吸纳录入结果
+   * 导出企业吸纳录入结果--单人
+   *
+   * @param client 登陆后的client
+   * @param person 人员
+   * @param qsny   起始年月
+   * @param zzny   终止年月
+   */
+  public static void ExportQYResult(CloseableHttpClient client, PersonQY person, String qsny, String zzny) throws Exception {
+    String fileName = "c:\\" + qsny + "-" + zzny + "企业吸纳录入结果" + ".xlsx";
+    CreateResult(fileName);
+    XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
+    XSSFSheet sheet = workbook.getSheetAt(0);
+    int total = sheet.getLastRowNum();
+    XSSFRow rowNew = sheet.createRow(total + 1);
+    rowNew.createCell(0).setCellValue(person.getGmsfhm());
+    rowNew.createCell(1).setCellValue(person.getGrxm());
+    rowNew.createCell(2).setCellValue(QiYe.save(client, person.getGrxm(), person.getGmsfhm(), qsny, zzny));
+    workbook.write(new FileOutputStream(fileName));
+    workbook.close();
+
+  }
+
+  /**
+   * 导出企业吸纳录入结果--多人
    *
    * @param client  登陆后的client
    * @param persons 人员列表
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param qsny    起始年月
+   * @param zzny    终止年月
    */
-  public static void ExportQYResult(CloseableHttpClient client, List<PersonQY> persons, String startMonth, String endMonth) throws Exception {
-    XSSFWorkbook workbook = new XSSFWorkbook();
-    XSSFSheet sheet = workbook.createSheet("sheet1");
-    XSSFRow row = sheet.createRow(0);
-    row.createCell(0).setCellValue("公民身份号码");
-    row.createCell(1).setCellValue("个人姓名");
-    row.createCell(2).setCellValue("结果");
+  public static void ExportQYResult(CloseableHttpClient client, List<PersonQY> persons, String qsny, String zzny) throws Exception {
+    String fileName = "c:\\" + qsny + "-" + zzny + "企业吸纳录入结果" + ".xlsx";
+    CreateResult(fileName);
     for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
+      XSSFSheet sheet = workbook.getSheetAt(0);
       XSSFRow rowNew = sheet.createRow(i);
       rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      rowNew.createCell(2).setCellValue(QiYe.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), startMonth,endMonth));
+      String result = QiYe.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), qsny, zzny);
+      if (result.indexOf("补贴生成错误，请人工核查！原因为") > 0) {
+        rowNew.createCell(2).setCellValue(result + "---尝试分月录入");
+        FileOutputStream os = new FileOutputStream(fileName);
+        workbook.write(os);
+        os.close();
+        Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
+        ExportQYResult(client, persons.get(i - 1), qsny, qsny);//第一个月
+        for (int j = 1; j < jgys + 1; j++) {
+          String zjny = Integer.parseInt(qsny) + j + "";
+          ExportQYResult(client, persons.get(i - 1), zjny, zjny);//第N个月
+        }
+      } else {
+        rowNew.createCell(2).setCellValue(result);
+        FileOutputStream os = new FileOutputStream(fileName);
+        workbook.write(os);
+        os.close();
+      }
+
     }
-    FileOutputStream os = new FileOutputStream("c:\\" + startMonth+ "-" + endMonth + "企业吸纳录入结果" + ".xlsx");
-    workbook.write(os);
-    os.close();
+    System.out.println("请查看结果");
   }
 
   /**
@@ -353,35 +410,72 @@ public class Export {
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
       rowNew.createCell(2).setCellValue(GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), month));
     }
-    FileOutputStream os = new FileOutputStream("c:\\" + month + "公益岗位录入结果" + ".xlsx");
+    FileOutputStream os = new FileOutputStream("c:\\" + month + "-" + month + "公益岗位录入结果" + ".xlsx");
     workbook.write(os);
     os.close();
   }
 
   /**
-   * 导出公益岗位录入结果
+   * 导出公益岗位录入结果--单人
+   *
+   * @param client 登陆后的client
+   * @param person 人员
+   * @param qsny   起始年月
+   * @param zzny   终止年月
+   */
+  public static void ExportGGResult(CloseableHttpClient client, PersonGG person, String qsny, String zzny) throws Exception {
+    String fileName = "c:\\" + qsny + "-" + zzny + "公益岗位录入结果" + ".xlsx";
+    CreateResult(fileName);
+    XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
+    XSSFSheet sheet = workbook.getSheetAt(0);
+    int total = sheet.getLastRowNum();
+    XSSFRow rowNew = sheet.createRow(total + 1);
+    rowNew.createCell(0).setCellValue(person.getGmsfhm());
+    rowNew.createCell(1).setCellValue(person.getGrxm());
+    rowNew.createCell(2).setCellValue(GongGang.save(client, person.getGrxm(), person.getGmsfhm(), qsny, zzny));
+    workbook.write(new FileOutputStream(fileName));
+    workbook.close();
+
+  }
+
+  /**
+   * 导出公益岗位录入结果--多人
    *
    * @param client  登陆后的client
    * @param persons 人员列表
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param qsny    起始年月
+   * @param zzny    终止年月
    */
-  public static void ExportGGResult(CloseableHttpClient client, List<PersonGG> persons, String startMonth, String endMonth) throws Exception {
-    XSSFWorkbook workbook = new XSSFWorkbook();
-    XSSFSheet sheet = workbook.createSheet("sheet1");
-    XSSFRow row = sheet.createRow(0);
-    row.createCell(0).setCellValue("公民身份号码");
-    row.createCell(1).setCellValue("个人姓名");
-    row.createCell(2).setCellValue("结果");
+  public static void ExportGGResult(CloseableHttpClient client, List<PersonGG> persons, String qsny, String zzny) throws Exception {
+    String fileName = "c:\\" + qsny + "-" + zzny + "公益岗位录入结果" + ".xlsx";
+    CreateResult(fileName);
     for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
+      XSSFSheet sheet = workbook.getSheetAt(0);
       XSSFRow rowNew = sheet.createRow(i);
       rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      rowNew.createCell(2).setCellValue(GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), startMonth, endMonth));
+      String result = GongGang.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), qsny, zzny);
+      if (result.indexOf("补贴生成错误，请人工核查！原因为") > 0) {
+        rowNew.createCell(2).setCellValue(result + "---尝试分月录入");
+        FileOutputStream os = new FileOutputStream(fileName);
+        workbook.write(os);
+        os.close();
+        Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
+        ExportGGResult(client, persons.get(i - 1), qsny, qsny);//第一个月
+        for (int j = 1; j < jgys + 1; j++) {
+          String zjny = Integer.parseInt(qsny) + j + "";
+          ExportGGResult(client, persons.get(i - 1), zjny, zjny);//第N个月
+        }
+      } else {
+        rowNew.createCell(2).setCellValue(result);
+        FileOutputStream os = new FileOutputStream(fileName);
+        workbook.write(os);
+        os.close();
+      }
+
     }
-    FileOutputStream os = new FileOutputStream("c:\\" + startMonth + "-" + endMonth + "公益岗位录入结果" + ".xlsx");
-    workbook.write(os);
-    os.close();
+    System.out.println("请查看结果");
   }
 
   /**
@@ -409,31 +503,65 @@ public class Export {
     os.close();
     System.out.println("请查看结果");
   }
+  /**
+   * 导出灵活就业录入结果--单人
+   *
+   * @param client 登陆后的client
+   * @param person 人员
+   * @param qsny   起始年月
+   * @param zzny   终止年月
+   */
+  public static void ExportLHResult(CloseableHttpClient client, PersonLH person, String qsny, String zzny) throws Exception {
+    String fileName = "c:\\" + qsny + "-" + zzny + "灵活就业录入结果" + ".xlsx";
+    CreateResult(fileName);
+    XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
+    XSSFSheet sheet = workbook.getSheetAt(0);
+    int total = sheet.getLastRowNum();
+    XSSFRow rowNew = sheet.createRow(total + 1);
+    rowNew.createCell(0).setCellValue(person.getGmsfhm());
+    rowNew.createCell(1).setCellValue(person.getGrxm());
+    rowNew.createCell(2).setCellValue(LingHuo.save(client, person.getGrxm(), person.getGmsfhm(), qsny, zzny));
+    workbook.write(new FileOutputStream(fileName));
+    workbook.close();
+
+  }
 
   /**
-   * 导出灵活就业录入结果
+   * 导出灵活就业录入结果--多人
    *
-   * @param client     登陆后的client
-   * @param persons    人员列表
-   * @param startMonth 起始月份
-   * @param endMonth   终止月份
+   * @param client  登陆后的client
+   * @param persons 人员列表
+   * @param qsny    起始年月
+   * @param zzny    终止年月
    */
-  public static void ExportLHResult(CloseableHttpClient client, List<PersonLH> persons, String startMonth, String endMonth) throws Exception {
-    XSSFWorkbook workbook = new XSSFWorkbook();
-    XSSFSheet sheet = workbook.createSheet("sheet1");
-    XSSFRow row = sheet.createRow(0);
-    row.createCell(0).setCellValue("公民身份号码");
-    row.createCell(1).setCellValue("个人姓名");
-    row.createCell(2).setCellValue("结果");
+  public static void ExportLHResult(CloseableHttpClient client, List<PersonLH> persons, String qsny, String zzny) throws Exception {
+    String fileName = "c:\\" + qsny + "-" + zzny + "灵活就业录入结果" + ".xlsx";
+    CreateResult(fileName);
     for (int i = 1; i < persons.size() + 1; i++) {
+      XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileName));
+      XSSFSheet sheet = workbook.getSheetAt(0);
       XSSFRow rowNew = sheet.createRow(i);
       rowNew.createCell(0).setCellValue(persons.get(i - 1).getGmsfhm());
       rowNew.createCell(1).setCellValue(persons.get(i - 1).getGrxm());
-      rowNew.createCell(2).setCellValue(LingHuo.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), startMonth, endMonth));
+      String result = LingHuo.save(client, persons.get(i - 1).getGrxm(), persons.get(i - 1).getGmsfhm(), qsny, zzny);
+      if (result.indexOf("补贴生成错误，请人工核查！原因为") > 0) {
+        rowNew.createCell(2).setCellValue(result + "---尝试分月录入");
+        FileOutputStream os = new FileOutputStream(fileName);
+        workbook.write(os);
+        os.close();
+        Integer jgys = Integer.parseInt(zzny) - Integer.parseInt(qsny);//间隔月数
+        ExportLHResult(client, persons.get(i - 1), qsny, qsny);//第一个月
+        for (int j = 1; j < jgys + 1; j++) {
+          String zjny = Integer.parseInt(qsny) + j + "";
+          ExportLHResult(client, persons.get(i - 1), zjny, zjny);//第N个月
+        }
+      } else {
+        rowNew.createCell(2).setCellValue(result);
+        FileOutputStream os = new FileOutputStream(fileName);
+        workbook.write(os);
+        os.close();
+      }
     }
-    FileOutputStream os = new FileOutputStream("c:\\" + startMonth + "-" + endMonth + "灵活就业录入结果" + ".xlsx");
-    workbook.write(os);
-    os.close();
     System.out.println("请查看结果");
   }
 
