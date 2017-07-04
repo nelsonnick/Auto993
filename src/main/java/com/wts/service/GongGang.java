@@ -163,18 +163,18 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(),qsny)) {
+    if (!checkRetire(personGG.getGmsfhm(), qsny)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), qsny,"A");
+    Element element = getSecurity(personGG.getGmsfhm(), qsny, "A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "无法录入：起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(personGG.getGmsfhm(), zzny,"A");
+    Element element2 = getSecurity(personGG.getGmsfhm(), zzny, "A");
     if (!personGG.getDwmc().equals(getDWMC(element2))) {
       return "无法录入：终止月份单位名称不一致！";
     }
@@ -202,14 +202,14 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(),month)) {
+    if (!checkRetire(personGG.getGmsfhm(), month)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), month,"A");
+    Element element = getSecurity(personGG.getGmsfhm(), month, "A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "无法录入：单位名称不一致！";
     }
@@ -239,7 +239,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,qsny)) {
+    if (!checkRetire(gmsfhm, qsny)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -264,11 +264,11 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, qsny,"A");
+    Element element = getSecurity(gmsfhm, qsny, "A");
     if (!dwmc.equals(getDWMC(element))) {
       return "无法录入：起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(gmsfhm, zzny,"A");
+    Element element2 = getSecurity(gmsfhm, zzny, "A");
     if (!dwmc.equals(getDWMC(element2))) {
       return "无法录入：终止月份单位名称不一致！";
     }
@@ -300,7 +300,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,month)) {
+    if (!checkRetire(gmsfhm, month)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -325,7 +325,7 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, month,"A");
+    Element element = getSecurity(gmsfhm, month, "A");
     if (!dwmc.equals(getDWMC(element))) {
       return "无法录入：单位名称不一致！";
     }
@@ -356,14 +356,14 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(),month)) {
+    if (!checkRetire(personGG.getGmsfhm(), month)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), month,"A");
+    Element element = getSecurity(personGG.getGmsfhm(), month, "A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "单位名称不一致！";
     }
@@ -409,18 +409,18 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(),qsny)) {
+    if (!checkRetire(personGG.getGmsfhm(), qsny)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), qsny,"A");
+    Element element = getSecurity(personGG.getGmsfhm(), qsny, "A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "起始月份的单位名称不一致！";
     }
-    Element element2 = getSecurity(personGG.getGmsfhm(), zzny,"A");
+    Element element2 = getSecurity(personGG.getGmsfhm(), zzny, "A");
     if (!personGG.getDwmc().equals(getDWMC(element2))) {
       return "终止月份的单位名称不一致！";
     }
@@ -466,7 +466,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,month)) {
+    if (!checkRetire(gmsfhm, month)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -490,7 +490,7 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, month,"A");
+    Element element = getSecurity(gmsfhm, month, "A");
     if (!dwmc.equals(getDWMC(element))) {
       return "单位名称不一致！";
     }
@@ -540,7 +540,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,qsny)) {
+    if (!checkRetire(gmsfhm, qsny)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -564,11 +564,11 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, qsny,"A");
+    Element element = getSecurity(gmsfhm, qsny, "A");
     if (!dwmc.equals(getDWMC(element))) {
       return "起始年月单位名称不一致！";
     }
-    Element element2 = getSecurity(gmsfhm, zzny,"A");
+    Element element2 = getSecurity(gmsfhm, zzny, "A");
     if (!dwmc.equals(getDWMC(element2))) {
       return "终止年月单位名称不一致！";
     }

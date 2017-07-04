@@ -535,11 +535,11 @@ public class IDKit {
   public static boolean availableID(String id) {
     if (id.matches("\\d{17}[0-9,X]")) {
       if (checkBirth(id)) {
-					if (checkOut(id)) {
-						return true;
-					}
-					return false;
-				}
+        if (checkOut(id)) {
+          return true;
+        }
+        return false;
+      }
     }
     return false;
   }
@@ -569,6 +569,7 @@ public class IDKit {
     }
     return 2;// 女
   }
+
   public static String getMF(String id) {
     if (id.substring(16, 17).equals("1")
             || id.substring(16, 17).equals("3")
@@ -579,6 +580,7 @@ public class IDKit {
     }
     return "F";// 女
   }
+
   public static String get(String id) {
     if (id.substring(16, 17).equals("1")
             || id.substring(16, 17).equals("3")
@@ -589,6 +591,7 @@ public class IDKit {
     }
     return "女";//
   }
+
   public static String getRetireMonth(String id, Date DocunmentBirth) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
     String str = sdf.format(DocunmentBirth);
@@ -648,6 +651,7 @@ public class IDKit {
       }
     }
   }
+
   public static Date getBirthDate(String id) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
@@ -660,6 +664,7 @@ public class IDKit {
     }
     return null;
   }
+
   public static Date getFileDate(String DateNumber) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
     try {
@@ -685,6 +690,7 @@ public class IDKit {
     }
     return false;
   }
+
   public static String getfileAge(String number) {
     if (number.matches("\\d{8}")) {
       if (checkFileDate(number)) {
@@ -704,25 +710,27 @@ public class IDKit {
     }
     return false;
   }
-/**
-* 判断是否超龄，超龄返回TRUE
- */
-public static boolean checkRetire(String number, String month) {
-  String birth = number.substring(6, 12);
-  if (getSex(number) == 1) {
-    if (Integer.parseInt(month) > Integer.parseInt(birth) + 6000) {
-      return true;
+
+  /**
+   * 判断是否超龄，超龄返回TRUE
+   */
+  public static boolean checkRetire(String number, String month) {
+    String birth = number.substring(6, 12);
+    if (getSex(number) == 1) {
+      if (Integer.parseInt(month) > Integer.parseInt(birth) + 6000) {
+        return true;
+      }
+    } else {
+      if (Integer.parseInt(month) > Integer.parseInt(birth) + 5000) {
+        return true;
+      }
     }
-  } else {
-    if (Integer.parseInt(month) > Integer.parseInt(birth) + 5000) {
-      return true;
-    }
-  }
 
 
     return false;
   }
+
   public static void main(String[] args) {
-    System.out.println(checkRetire("370104198606282229","203606"));
+    System.out.println(checkRetire("370104198606282229", "203606"));
   }
 }

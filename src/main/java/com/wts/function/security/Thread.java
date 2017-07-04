@@ -131,7 +131,7 @@ public class Thread extends java.lang.Thread {
             out.write(elements2.get(m).attributeValue("dwjfjs") + "\t");
 
             if (elements2.get(m).attributeValue("zdlsh").trim().equals("未填单据")) {
-              out.write(" "+"\t");
+              out.write(" " + "\t");
             } else {
               for (int n = 0; n < elements3.size(); n++) {
                 if (elements2.get(m).attributeValue("zdlsh").equals(elements3.get(n).attributeValue("zdlsh"))) {

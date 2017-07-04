@@ -167,8 +167,8 @@ public class Thread extends java.lang.Thread {
    * 判断指定文件是否存在，不存在则创建
    *
    * @param result 文件名
-   * @param id 证件号码
-   * @param name 人员姓名
+   * @param id     证件号码
+   * @param name   人员姓名
    * @throws IOException
    */
   public static void blankFile(String result, String id, String name) throws IOException {

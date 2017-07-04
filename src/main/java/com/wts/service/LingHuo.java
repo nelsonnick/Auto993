@@ -164,7 +164,7 @@ public class LingHuo {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(personLH.getGmsfhm(),qsny)) {
+    if (!checkRetire(personLH.getGmsfhm(), qsny)) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -198,7 +198,7 @@ public class LingHuo {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(personLH.getGmsfhm(),month)) {
+    if (!checkRetire(personLH.getGmsfhm(), month)) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -234,7 +234,7 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,qsny)) {
+    if (!checkRetire(gmsfhm, qsny)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -287,7 +287,7 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,month)) {
+    if (!checkRetire(gmsfhm, month)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -340,7 +340,7 @@ public class LingHuo {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(personLH.getGmsfhm(),month)) {
+    if (!checkRetire(personLH.getGmsfhm(), month)) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -370,10 +370,10 @@ public class LingHuo {
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),month,"A")))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(), month, "A")))) {
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),month,"C")))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(), month, "C")))) {
       return "医疗补贴金额错误！";
     }
 
@@ -401,7 +401,7 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,month)) {
+    if (!checkRetire(gmsfhm, month)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -454,10 +454,10 @@ public class LingHuo {
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,month,"A")))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm, month, "A")))) {
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,month,"C")))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm, month, "C")))) {
       return "医疗补贴金额错误！";
     }
 
@@ -486,7 +486,7 @@ public class LingHuo {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(personLH.getGmsfhm(),qsny)) {
+    if (!checkRetire(personLH.getGmsfhm(), qsny)) {
       System.out.println(personLH.getGmsfhm() + personLH.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -516,10 +516,10 @@ public class LingHuo {
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),qsny,"A")))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(), qsny, "A")))) {
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),qsny,"C")))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(), qsny, "C")))) {
       return "医疗补贴金额错误！";
     }
 
@@ -547,7 +547,7 @@ public class LingHuo {
       System.out.println(gmsfhm + grxm + "--" + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm,qsny)) {
+    if (!checkRetire(gmsfhm, qsny)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -599,11 +599,11 @@ public class LingHuo {
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,qsny,"A")))){
-        System.out.println(gmsfhm + grxm + "--养老补贴金额错误！");
+    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm, qsny, "A")))) {
+      System.out.println(gmsfhm + grxm + "--养老补贴金额错误！");
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,qsny,"C")))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm, qsny, "C")))) {
       System.out.println(gmsfhm + grxm + "--医疗补贴金额错误！");
       return "医疗补贴金额错误！";
     }

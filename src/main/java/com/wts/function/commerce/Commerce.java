@@ -17,7 +17,7 @@ public class Commerce {
    * 根据是否存在注销日期或吊销日期判断是否有工商信息
    *
    * @param jsStrs Json字符串
-   * @return  存在返回true
+   * @return 存在返回true
    */
   public static Boolean checkJson(JSONArray jsStrs) {
     Boolean result = false;
@@ -35,11 +35,11 @@ public class Commerce {
 
 
   /**
-   * @param client   登陆后的client
-   * @param id 身份证号码 String personNumber15 =personNumber.substring(0,6)+personNumber.substring(8,17);
+   * @param client 登陆后的client
+   * @param id     身份证号码 String personNumber15 =personNumber.substring(0,6)+personNumber.substring(8,17);
    * @return
    */
-  public static Boolean getCommerce(CloseableHttpClient client,String id) throws Exception {
+  public static Boolean getCommerce(CloseableHttpClient client, String id) throws Exception {
     URI uri = new URIBuilder()
             .setScheme("http")
             .setHost("10.153.50.108:7001")
@@ -63,7 +63,7 @@ public class Commerce {
       JSONArray jsStrs1 = JSONArray.fromObject(res.substring(res.lastIndexOf("init('true','true','[") + 20, res.lastIndexOf("]');</script>") + 1));
       JSONArray jsStrs2 = JSONArray.fromObject(res.substring(res.indexOf("init('true','true','[") + 20, res.indexOf("]');</script>") + 1));
       return checkJson(jsStrs1) || checkJson(jsStrs2);
-    }else{
+    } else {
       return false;
     }
   }

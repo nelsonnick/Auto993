@@ -153,16 +153,8 @@ public class Input {
       System.out.print("请输入要录入的6位终止年月：");
       InputStreamReader is_reader = new InputStreamReader(System.in);
       zzny = new BufferedReader(is_reader).readLine();
-    } while (!zzny.matches("\\d{6}"));
+    } while (!zzny.matches("\\d{6}") && Integer.parseInt(qsny) > Integer.parseInt(zzny));
 
-    if (Integer.parseInt(qsny) > Integer.parseInt(zzny)) {
-      System.out.print("起始年月" + qsny + "不能晚于终止年月" + zzny + "！");
-      System.out.print("按回车关闭程序...");
-      while (true) {
-        if (System.in.read() == '\n')
-          System.exit(0);
-      }
-    }
     CloseableHttpClient client = login(Common.userid, Common.passwd);
     List<PersonLH> persons = ImportLH(result);
     ExportLHResult(client, persons, qsny, zzny);

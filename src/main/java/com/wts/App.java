@@ -11,7 +11,7 @@ public class App {
     System.out.println(" ");
     System.out.println("                        欢迎使用自动993_v3.0版");
     System.out.println(" ");
-    String userid,passwd;
+    String userid, passwd;
     do {
       System.out.print("请输入您在993系统中的用户名：");
       InputStreamReader is_reader = new InputStreamReader(System.in);
@@ -22,8 +22,8 @@ public class App {
       InputStreamReader is_reader = new InputStreamReader(System.in);
       passwd = new BufferedReader(is_reader).readLine();
     } while (passwd.equals(""));
-    Common.userid=userid;
-    Common.passwd=passwd;
+    Common.userid = userid;
+    Common.passwd = passwd;
 
 
     System.out.println("993当前用户名：" + Common.userid + "   密码：" + Common.passwd);
