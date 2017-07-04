@@ -370,10 +370,10 @@ public class LingHuo {
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),month)))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),month,"A")))){
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),month)))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),month,"C")))){
       return "医疗补贴金额错误！";
     }
 
@@ -454,10 +454,10 @@ public class LingHuo {
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,month)))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,month,"A")))){
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,month)))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,month,"C")))){
       return "医疗补贴金额错误！";
     }
 
@@ -516,10 +516,10 @@ public class LingHuo {
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),qsny)))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(personLH.getGmsfhm(),qsny,"A")))){
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),qsny)))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(personLH.getGmsfhm(),qsny,"C")))){
       return "医疗补贴金额错误！";
     }
 
@@ -599,11 +599,11 @@ public class LingHuo {
     sfyxffylbt = jsStr.getString("sfyxffylbt");
     sfyxffyilbt = jsStr.getString("sfyxffyilbt");
 
-    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,qsny)))){
+    if (!yanglaobz.equals(getYanglao(getSecurity(gmsfhm,qsny,"A")))){
         System.out.println(gmsfhm + grxm + "--养老补贴金额错误！");
       return "养老补贴金额错误！";
     }
-    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,qsny)))){
+    if (!yiliaobz.equals(getYiliao(getSecurity(gmsfhm,qsny,"C")))){
       System.out.println(gmsfhm + grxm + "--医疗补贴金额错误！");
       return "医疗补贴金额错误！";
     }

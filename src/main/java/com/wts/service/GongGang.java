@@ -170,11 +170,11 @@ public class GongGang {
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), qsny);
+    Element element = getSecurity(personGG.getGmsfhm(), qsny,"A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "无法录入：起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(personGG.getGmsfhm(), zzny);
+    Element element2 = getSecurity(personGG.getGmsfhm(), zzny,"A");
     if (!personGG.getDwmc().equals(getDWMC(element2))) {
       return "无法录入：终止月份单位名称不一致！";
     }
@@ -209,7 +209,7 @@ public class GongGang {
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "无法录入：存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), month);
+    Element element = getSecurity(personGG.getGmsfhm(), month,"A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "无法录入：单位名称不一致！";
     }
@@ -264,11 +264,11 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, qsny);
+    Element element = getSecurity(gmsfhm, qsny,"A");
     if (!dwmc.equals(getDWMC(element))) {
       return "无法录入：起始月份单位名称不一致！";
     }
-    Element element2 = getSecurity(gmsfhm, zzny);
+    Element element2 = getSecurity(gmsfhm, zzny,"A");
     if (!dwmc.equals(getDWMC(element2))) {
       return "无法录入：终止月份单位名称不一致！";
     }
@@ -325,7 +325,7 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, month);
+    Element element = getSecurity(gmsfhm, month,"A");
     if (!dwmc.equals(getDWMC(element))) {
       return "无法录入：单位名称不一致！";
     }
@@ -363,7 +363,7 @@ public class GongGang {
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), month);
+    Element element = getSecurity(personGG.getGmsfhm(), month,"A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "单位名称不一致！";
     }
@@ -416,11 +416,11 @@ public class GongGang {
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
       return "存在未注销的工商信息！";
     }
-    Element element = getSecurity(personGG.getGmsfhm(), qsny);
+    Element element = getSecurity(personGG.getGmsfhm(), qsny,"A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
       return "起始月份的单位名称不一致！";
     }
-    Element element2 = getSecurity(personGG.getGmsfhm(), zzny);
+    Element element2 = getSecurity(personGG.getGmsfhm(), zzny,"A");
     if (!personGG.getDwmc().equals(getDWMC(element2))) {
       return "终止月份的单位名称不一致！";
     }
@@ -490,7 +490,7 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, month);
+    Element element = getSecurity(gmsfhm, month,"A");
     if (!dwmc.equals(getDWMC(element))) {
       return "单位名称不一致！";
     }
@@ -564,11 +564,11 @@ public class GongGang {
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
-    Element element = getSecurity(gmsfhm, qsny);
+    Element element = getSecurity(gmsfhm, qsny,"A");
     if (!dwmc.equals(getDWMC(element))) {
       return "起始年月单位名称不一致！";
     }
-    Element element2 = getSecurity(gmsfhm, zzny);
+    Element element2 = getSecurity(gmsfhm, zzny,"A");
     if (!dwmc.equals(getDWMC(element2))) {
       return "终止年月单位名称不一致！";
     }

@@ -875,9 +875,10 @@ public class Security {
     /**
      * @param id    身份证号码
      * @param month 6位年月
+     * @param type 保险类型 A养老B失业C医疗D工伤E生育F大额
      * @return 缴费记录
      */
-    public static Element getSecurity(String id, String month) throws Exception {
+    public static Element getSecurity(String id, String month,String type) throws Exception {
         Element element = null;
 
         OkHttpClient client = new OkHttpClient();
@@ -941,7 +942,10 @@ public class Security {
             Element e = (Element) it.next();
             String qsny = e.attributeValue("qsny").substring(0, 4) + e.attributeValue("qsny").substring(5, 7);
             String zzny = e.attributeValue("zzny").substring(0, 4) + e.attributeValue("zzny").substring(5, 7);
-            if (Integer.parseInt(qsny) <= Integer.parseInt(month) && Integer.parseInt(zzny) >= Integer.parseInt(month)) {
+            if (Integer.parseInt(qsny) <= Integer.parseInt(month)
+                    && Integer.parseInt(zzny) >= Integer.parseInt(month)
+                    && e.attributeValue("xzbz").equals(type)
+                    ) {
                 element = e;
                 break;
             }
@@ -950,7 +954,10 @@ public class Security {
             for (int m = 0; m < elements2.size(); m++) {
                 String qsny = elements2.get(m).attributeValue("qsny").substring(0, 4) + elements2.get(m).attributeValue("qsny").substring(5, 7);
                 String zzny = elements2.get(m).attributeValue("zzny").substring(0, 4) + elements2.get(m).attributeValue("zzny").substring(5, 7);
-                if (Integer.parseInt(qsny) <= Integer.parseInt(month) && Integer.parseInt(zzny) >= Integer.parseInt(month)) {
+                if (Integer.parseInt(qsny) <= Integer.parseInt(month)
+                        && Integer.parseInt(zzny) >= Integer.parseInt(month)
+                        && elements2.get(m).attributeValue("xzbz").equals(type)
+                        ) {
                     for (int n = 0; n < elements3.size(); n++) {
                         if (elements2.get(m).attributeValue("zdlsh").equals(elements3.get(n).attributeValue("zdlsh"))) {
                             if (elements3.get(n).attributeValue("qrsj").substring(0, 6).equals(month)) {
@@ -1003,9 +1010,9 @@ public class Security {
                 case "个人两险":
                     return "352.00";
                 case "单位五险":
-                    return "";
+                    return "0.00";
                 default:
-                    return "";
+                    return "0.00";
             }
 
         }
@@ -1051,4 +1058,14 @@ public class Security {
         }
     }
 
+    public static void main(String[] args) throws Exception{
+        String a=getYanglao(getSecurity("370104197005221328","201705","B"));
+        System.out.println(a);
+        String b=getYiliao(getSecurity("370104197005221328","201704","C"));
+        System.out.println(b);
+        String c=getYiliao(getSecurity("370104197005221328","201705","C"));
+        System.out.println(c);
+        String d=getYiliao(getSecurity("370104197005221328","201706","C"));
+        System.out.println(d);
+    }
 }
