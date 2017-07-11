@@ -80,7 +80,7 @@ public class LingHuo {
     String mergePerson = getDataAll(client, datawindow, total);
     JSONArray jsStrs = JSONArray.fromObject(mergePerson);
     if (jsStrs.size() > 0) {
-      for (int j = 0; j < jsStrs.size() + 1; j++) {
+      for (int j = 0; j < jsStrs.size(); j++) {
         JSONObject jsStr = jsStrs.getJSONObject(j);
         PersonLH p = new PersonLH();
         p.setWhcd(jsStr.getString("whcd"));

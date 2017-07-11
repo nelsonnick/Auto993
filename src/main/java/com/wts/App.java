@@ -36,7 +36,8 @@ public class App {
     System.out.println("4、核查社保信息--内网");
     System.out.println("5、下载社保信息--内网");
     System.out.println("6、分析社保信息--内网");
-    System.out.println("7、自动录入补贴（灵活就业）--内网");
+    System.out.println("7、自动录入补贴（灵活就业，自行提供人员信息）--内网");
+    System.out.println("8、自动录入补贴（灵活就业，自动下载人员信息）--内网");
     System.out.println(" ");
     String result;
     do {
@@ -50,7 +51,8 @@ public class App {
             && !result.equals("4")
             && !result.equals("5")
             && !result.equals("6")
-            && !result.equals("7")); // 当用户输入无效的时候，反复提示要求用户输入
+            && !result.equals("7")
+            && !result.equals("8")); // 当用户输入无效的时候，反复提示要求用户输入
     switch (result) {
       case "1":
         com.wts.function.commerce.GetBy993.get();
@@ -73,8 +75,11 @@ public class App {
       case "7":
         com.wts.function.Input.inputLH();
         break;
+      case "8":
+        com.wts.function.Input.inputLHBy993();
+        break;
       default:
-        System.out.println("请输入数字1到数字7，并按回车键确认：");
+        System.out.println("请输入数字1到数字8，并按回车键确认：");
     }
 
   }
