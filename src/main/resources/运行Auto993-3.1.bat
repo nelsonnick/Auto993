@@ -1,7 +1,7 @@
 @echo off
-title Auto993_v3.0
+title Auto993_v3.1
 color 3f
 :begin
 java -version
 echo.
-java -jar Auto993-3.0.jar
+java -jar Auto993-3.1.jar
