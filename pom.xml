@@ -6,7 +6,7 @@
 
   <groupId>com.wts</groupId>
   <artifactId>Auto993</artifactId>
-  <version>3.1</version>
+  <version>3.2</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -60,7 +60,6 @@
       <artifactId>jsoup</artifactId>
       <version>1.10.3</version>
     </dependency>
-
   </dependencies>
   <build>
     <plugins>

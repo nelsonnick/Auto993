@@ -42,7 +42,7 @@ public class App {
     String result;
     do {
       // 输出提示文字
-      System.out.print("请输入数字1到数字7，并按回车键确认：");
+      System.out.print("请输入数字1到数字8，并按回车键确认：");
       InputStreamReader is_reader = new InputStreamReader(System.in);
       result = new BufferedReader(is_reader).readLine();
     } while (!result.equals("1")

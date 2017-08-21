@@ -163,7 +163,7 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(), qsny)) {
+    if (checkRetire(personGG.getGmsfhm(), qsny)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -202,7 +202,7 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(), month)) {
+    if (checkRetire(personGG.getGmsfhm(), month)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -239,7 +239,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm, qsny)) {
+    if (checkRetire(gmsfhm, qsny)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -300,7 +300,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "无法录入：身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm, month)) {
+    if (checkRetire(gmsfhm, month)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -356,7 +356,7 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(), month)) {
+    if (checkRetire(personGG.getGmsfhm(), month)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -409,7 +409,7 @@ public class GongGang {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(personGG.getGmsfhm(), qsny)) {
+    if (checkRetire(personGG.getGmsfhm(), qsny)) {
       System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -466,7 +466,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--" + month + "身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm, month)) {
+    if (checkRetire(gmsfhm, month)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }
@@ -540,7 +540,7 @@ public class GongGang {
       System.out.println(gmsfhm + grxm + "--身份证号码错误！");
       return "身份证号码错误！";
     }
-    if (!checkRetire(gmsfhm, qsny)) {
+    if (checkRetire(gmsfhm, qsny)) {
       System.out.println(gmsfhm + grxm + "--已超龄！");
       return "无法录入：已超龄！";
     }

@@ -725,12 +725,10 @@ public class IDKit {
         return true;
       }
     }
-
-
     return false;
   }
 
   public static void main(String[] args) {
-    System.out.println(checkRetire("370104198606282229", "203606"));
+    System.out.println(checkRetire("370103195805113514", "201707"));
   }
 }
