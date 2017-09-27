@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Security {
-
+  private static String YangLao = "352.00";
+  private static String YiLiao = "172.00";
   /**
    * 获取保险类型
    *
@@ -1007,9 +1008,9 @@ public class Security {
     } else {
       switch (getSecurityType(element.attributeValue("dwbh"))) {
         case "个人一险":
-          return "352.00";
+          return YangLao;
         case "个人两险":
-          return "352.00";
+          return YangLao;
         case "单位五险":
           return "0.00";
         default:
@@ -1031,7 +1032,7 @@ public class Security {
         case "个人一险":
           return "0.00";
         case "个人两险":
-          return "172.00";
+          return YiLiao;
         case "单位五险":
           return "";
         default:

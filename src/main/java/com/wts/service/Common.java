@@ -242,7 +242,7 @@ public class Common {
       case 3:  // 灵活就业
         path = "/lemis3/lemis3SuccorFlexibleEmp.do";
         method = "queryFlexEmp";
-        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" spzt=\"\" qsrq=\"\" zzrq=\"\" sftc=\"0\" jbjgbh=\"" + jbjgbh + "\" jgbh=\"" + jgbh + "\" jgmc=\"" + jgmc + "\" sfbl=\"\" jsid=\"\" jsbh=\"\" jsmc=\"\" sfyba=\"\" /></p>";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" spzt=\"\" qsrq=\"\" zzrq=\"\" sftc=\"0\" jbjgbh=\"" + jbjgbh + "\" jgbh=\"" + jgbh + "\" jgmc=\"" + jgmc + "\" sfbl=\"\" jsid=\"\" jsbh=\"\" jsmc=\"\" sfyba=\"\" ></s></p>";
         break;
       default:
         return "";
@@ -264,6 +264,7 @@ public class Common {
     String res = EntityUtils.toString(entity, "UTF-8");
     String pageStart = "记录&nbsp;&nbsp;&nbsp;&nbsp;1/";
     String pageEnd = "页</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    System.out.println(res);
     return res.substring(res.indexOf(pageStart) + 28, res.indexOf(pageEnd));
 
   }
@@ -419,6 +420,10 @@ public class Common {
       return "不存在社保缴费信息，请检查！";
     } else if (res.indexOf("该人员的家庭成员") > 0) {
       return "该人员的家庭成员情况异常，请检查！";
+    } else if (res.indexOf("存在失业") > 0) {
+      return "该人员存在失业等保险情况，请检查！";
+    } else if (res.indexOf("调用接口出错") > 0) {
+      return "调用接口出错，请尝试手动录入！";
     } else {
       String start = "init('true','true','[";
       String end = "]');</script>";

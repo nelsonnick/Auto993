@@ -107,7 +107,7 @@ public class Input {
 
   public static void inputGG() throws Exception {
     System.out.println(" ");
-    System.out.println("                 8、自动录入补贴（公益岗位）        ");
+    System.out.println("                 9、自动录入公益岗位补贴（自行提供人员信息）        ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
     System.out.println(" ");
@@ -154,12 +154,13 @@ public class Input {
 
   public static void inputGGBy993() throws Exception {
     System.out.println(" ");
-    System.out.println("                 8、自动录入补贴（公益岗位）        ");
+    System.out.println("                 0、自动录入公益岗位补贴（自动下载人员信息）        ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
     System.out.println(" ");
     System.out.println("1：运行本功能前，请先切换到社保内网环境！");
     System.out.println("2：本程序将自动抓取993系统中未退出的公益岗位人员并录入补贴！");
+    System.out.println("3：个别中心运行程序时会出现异常错误，请放弃使用本功能！");
     System.out.println(" ");
     System.out.println("------------------------结果说明------------------------");
     System.out.println(" ");
@@ -190,7 +191,7 @@ public class Input {
 
   public static void inputLH() throws Exception {
     System.out.println(" ");
-    System.out.println("            7、自动录入补贴（灵活就业，自行提供人员信息）   ");
+    System.out.println("            7、自动录入灵活就业补贴（自行提供人员信息）   ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
     System.out.println(" ");
@@ -237,12 +238,13 @@ public class Input {
 
   public static void inputLHBy993() throws Exception {
     System.out.println(" ");
-    System.out.println("            8、自动录入补贴（灵活就业，自动下载人员信息）   ");
+    System.out.println("            8、自动录入灵活就业补贴（自动下载人员信息）   ");
     System.out.println(" ");
     System.out.println("------------------------用前须知------------------------");
     System.out.println(" ");
     System.out.println("1：运行本功能前，请先切换到社保内网环境！");
     System.out.println("2：本程序将自动抓取993系统中未退出的灵活就业人员并录入补贴！");
+    System.out.println("3：个别中心运行程序时会出现异常错误，请放弃使用本功能！");
     System.out.println(" ");
     System.out.println("------------------------结果说明------------------------");
     System.out.println(" ");

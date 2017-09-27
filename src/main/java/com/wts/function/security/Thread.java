@@ -179,7 +179,8 @@ public class Thread extends java.lang.Thread {
     } else if (type == 3) {
       sb.append("<para sqlstr=\"select zdlsh,qrsj from si.bill_genl   where djzt='2' and zdlsh in         (select zdlsh from si.emp_add where grbh='" + id + "' and zdlsh is not null)\"/>");
     } else {
-      sb.append("");
+      sb.append("<para sqlstr=\"select count('x') totalrowfordividepage from ( select grbh,xm,xb,e.dwbh,dwmc,zglb,sfzhm,swrq,e.csrq from si.emp_natl e,si.orgn_natl o where e.dwbh=o.dwbh and o.sbjgbh='370100' and  (xmpy = '%%' or sfzhm like '%%' or xm like '%%' or grbh like '%%' or ylzbh like '%%' )  and nvl(e.zxbz,'0')='0' and rownum`m=10 order by xm,zglb,grbh )\"/>");
+      // sb.append("");
     }
     sb.append("<para g_com_gzrybh=\"cxyh\"/>");
     sb.append("<para g_com_gzryxm=\"通用查询\"/>");
@@ -197,4 +198,67 @@ public class Thread extends java.lang.Thread {
     return sb.toString();
   }
 
+  public static void main(String[] args) throws Exception {
+
+    StringBuffer sb = new StringBuffer();
+    String XML_HEADER = "<?xml version=\"1.0\" encoding=\"GBK\"?>";
+    sb.append(XML_HEADER);
+    sb.append("<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" soap:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+    sb.append("<soap:Header>");
+    sb.append("<in:system xmlns:in=\"http://www.molss.gov.cn/\">");
+    sb.append("<para usr=\"\"/>");
+    sb.append("<para pwd=\"\"/>");
+    sb.append("<para funid=\"F00.00.3F\"/>");
+    sb.append("</in:system>");
+    sb.append("</soap:Header>");
+    sb.append("<soap:Body>");
+    sb.append("<in:business xmlns:in=\"http://www.molss.gov.cn/\">");
+    sb.append("<para startrowfordividepage=\"1\"/>");
+    sb.append("<para endrowfordividepage=\"51\"/>");
+    //sb.append("<para sqlstr=\"select grbh,xm,xb,e.dwbh,dwmc,zglb,sfzhm,swrq,e.csrq from si.emp_natl e,si.orgn_natl o where e.dwbh=o.dwbh and o.sbjgbh='370100' and  (xmpy = '%%' or sfzhm like '%%%' or xm like '%%%' or grbh like '%%%' or ylzbh like '%%%' )  and nvl(e.zxbz,'0')='0' and rownum`m=1000 order by xm,zglb,grbh\"/>");
+    sb.append("<para sqlstr=\"" +
+            "select xm,xb,e.dwbh,dwmc,zglb,sfzhm " +
+            "from si.emp_natl e,si.orgn_natl o " +
+            "where e.dwbh=o.dwbh " +
+              "and (sfzhm like '%%') " +
+              "and nvl(e.zxbz,'0')='0' " +
+              "and rownum`m=100 " +
+            "order by xm,zglb,grbh\"/>");
+    sb.append("<para g_com_gzrybh=\"cxyh\"/>");
+    sb.append("<para g_com_gzryxm=\"通用查询\"/>");
+    sb.append("<para g_com_sbjgbh=\"370100\"/>");
+    sb.append("<para g_com_xzbz=\"A\"/>");
+    sb.append("<para g_com_passwd=\"246325262611261127792835\"/>");
+    sb.append("<para g_com_passwd_md5=\"be91ffca1d2a70fc3c3880851dba5903\"/>");
+    sb.append("<para g_com_app=\"公共业务子系统\"/>");
+    sb.append("<para g_com_xtlb=\"001\"/>");
+    sb.append("<para g_com_mac=\"00-00-00-00-00-00\"/>");
+    sb.append("</in:business>");
+    sb.append("</soap:Body>");
+    sb.append("</soap:Envelope>");
+
+    OkHttpClient client = new OkHttpClient();
+    MediaType mediaType = MediaType.parse("text/xml;charset=GBK");
+    RequestBody body = RequestBody.create(mediaType, sb.toString());
+    Request request = new Request.Builder()
+            .url("http://10.153.50.123:80/lbs/MainServlet")
+            .post(body)
+            .addHeader("content-type", "text/xml;charset=GBK")
+            .addHeader("accept", "*.*;")
+            .addHeader("host", "dareway")
+            .build();
+    Response response = client.newCall(request).execute();
+    System.out.println(response.body().string());
+    Document document = DocumentHelper.parseText(response.body().string());
+    //获取根节点对象
+    Element rootElement = document.getRootElement();
+    //获取子节点
+    Element resultset = rootElement.element("Body").element("business").element("resultset");
+    List<Element> elements = new ArrayList<Element>();
+
+    for (Iterator it = resultset.elementIterator(); it.hasNext(); ) {
+      elements.add((Element) it.next());
+    }
+    System.out.println(elements.size());
+  }
 }
