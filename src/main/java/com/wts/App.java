@@ -83,10 +83,10 @@ public class App {
         com.wts.function.Input.inputLHBy993();
         break;
       case "9":
-        com.wts.function.Input.inputLH();
+        com.wts.function.Input.inputGG();
         break;
       case "0":
-        com.wts.function.Input.inputLHBy993();
+        com.wts.function.Input.inputGGBy993();
         break;
       default:
         System.out.println("请输入数字1到数字0，并按回车键确认：");

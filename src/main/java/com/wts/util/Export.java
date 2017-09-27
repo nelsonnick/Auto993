@@ -414,7 +414,6 @@ public class Export {
     rowNew.createCell(2).setCellValue(GongGang.save(client, person.getGrxm(), person.getGmsfhm(), qsny, zzny));
     workbook.write(new FileOutputStream(fileName));
     workbook.close();
-
   }
 
   /**

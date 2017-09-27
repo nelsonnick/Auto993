@@ -29,7 +29,7 @@ public class GongGang {
    * 获取单位信息
    */
   public static List<DW> getDW(CloseableHttpClient client) throws Exception {
-    List<DW> dws = null;
+    List<DW> dws  = new ArrayList<DW>();
     URI u = new URIBuilder()
             .setScheme("http")
             .setHost("10.153.50.108:7001")
@@ -75,8 +75,15 @@ public class GongGang {
     if (datawindow.equals("")) {
       return goPersonGGs;
     }
-    DW dw = getDW(client).get(0);
-    Integer total = Integer.parseInt(getDataTotal(client, datawindow, 2, dw.getDwbh(), dw.getDwmc()));
+    List<DW> dws = getDW(client);
+    DW dw = null;
+    for (DW dww :dws){
+      if (dww.getDwmc().endsWith("办事处")){
+        dw = dww;
+        break;
+      }
+    }
+    Integer total = Integer.parseInt(getDataTotal(client, datawindow, dw));
     String mergePerson = getDataAll(client, datawindow, total);
     JSONArray jsStrs = JSONArray.fromObject(mergePerson);
     if (jsStrs.size() > 0) {
@@ -135,7 +142,7 @@ public class GongGang {
             .setHost("10.153.50.108:7001")
             .setPath("/lemis3/lemis3MeritStation.do")
             .setParameter("method", "saveBonusAddForSinglePer")
-            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s grbh=\"" + grbh + "\" msg=\"\" grxm=\"" + grxm + "\" gmsfhm=\"" + gmsfhm + "\" djlsh=\"" + djlsh + "\" btrylb=\"01\" syys=\"" + syys + "\" qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" /><d k=\"dw_xzbt\"><r qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" sfyxyq=\"" + sfyxyq + "\" sfyxffylbt=\"" + sfyxffylbt + "\" sfyxffyilbt=\"" + sfyxffyilbt + "\" yanglaobz=\"" + yanglaobz + "\" yiliaobz=\"" + yiliaobz + "\" shiyebz=\"" + shiyebz + "\" gangweibz=\"" + gangweibz + "\" /></d></p>")
+            .setParameter("_xmlString", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s grbh=\"" + grbh + "\" msg=\"\" grxm=\"" + grxm + "\" gmsfhm=\"" + gmsfhm + "\" djlsh=\"" + djlsh + "\" btrylb=\"02\" syys=\"" + syys + "\" qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" /><d k=\"dw_xzbt\"><r qsny=\"" + qsny + "\" zzny=\"" + zzny + "\" sfyxyq=\"" + sfyxyq + "\" sfyxffylbt=\"" + sfyxffylbt + "\" sfyxffyilbt=\"" + sfyxffyilbt + "\" yanglaobz=\"" + yanglaobz + "\" yiliaobz=\"" + yiliaobz + "\" shiyebz=\"" + shiyebz + "\" gangweibz=\"" + gangweibz + "\" /></d></p>")
             .setParameter("_jbjgqxfw", "undefined")
             .setParameter("_sbjbjg", "undefined")
             .setParameter("_dwqxfw", "undefined")
@@ -361,21 +368,24 @@ public class GongGang {
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--存在未注销的工商信息！");
       return "存在未注销的工商信息！";
     }
     Element element = getSecurity(personGG.getGmsfhm(), month, "A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--单位名称不一致！");
       return "单位名称不一致！";
     }
     String syys = getSyys(client, 2, personGG.getGmsfhm(), personGG.getGrbh(), personGG.getDjlsh());
     if (syys.equals("0")) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--剩余补贴月数为零！");
       return "剩余补贴月数为零！";
     }
     String creat = creatSubsidy(client, 2, personGG.getGmsfhm(), personGG.getGrbh(), personGG.getDjlsh(), month, month, syys);
     if (!creat.substring(0, 1).equals("[")) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + month + "-" + month + "的补贴生成错误，请人工核查！原因为：" + creat);
       return month + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
-
     JSONArray jsStrs = JSONArray.fromObject(creat);
     String shiyebz = "", yiliaobz = "", yanglaobz = "", gangweibz = "", sfyxyq = "", sfyxffylbt = "", sfyxffyilbt = "";
 
@@ -414,25 +424,29 @@ public class GongGang {
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, personGG.getGmsfhm()) || getCommerce(client, personGG.getGmsfhm().substring(0, 6) + personGG.getGmsfhm().substring(8, 17))) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--存在未注销的工商信息！");
       return "存在未注销的工商信息！";
     }
     Element element = getSecurity(personGG.getGmsfhm(), qsny, "A");
     if (!personGG.getDwmc().equals(getDWMC(element))) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--起始月份的单位名称不一致！");
       return "起始月份的单位名称不一致！";
     }
     Element element2 = getSecurity(personGG.getGmsfhm(), zzny, "A");
     if (!personGG.getDwmc().equals(getDWMC(element2))) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--终止月份的单位名称不一致！");
       return "终止月份的单位名称不一致！";
     }
     String syys = getSyys(client, 2, personGG.getGmsfhm(), personGG.getGrbh(), personGG.getDjlsh());
     if (syys.equals("0")) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--剩余补贴月数为零！");
       return "剩余补贴月数为零！";
     }
     String creat = creatSubsidy(client, 2, personGG.getGmsfhm(), personGG.getGrbh(), personGG.getDjlsh(), qsny, zzny, syys);
     if (!creat.substring(0, 1).equals("[")) {
+      System.out.println(personGG.getGmsfhm() + personGG.getGrxm() + "--" + qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat);
       return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
-
     JSONArray jsStrs = JSONArray.fromObject(creat);
     String shiyebz = "", yiliaobz = "", yanglaobz = "", gangweibz = "", sfyxyq = "", sfyxffylbt = "", sfyxffyilbt = "";
 
@@ -471,38 +485,45 @@ public class GongGang {
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+      System.out.println(gmsfhm + grxm + "--存在未注销的工商信息！");
       return "存在未注销的工商信息！";
     }
     String datawindow = getTableMark(client, 2);
     if (datawindow.equals("")) {
+      System.out.println(gmsfhm + grxm + "--无法打开窗口！");
       return "无法打开窗口！";
     }
     //System.out.println(datawindow);
     String grbh = getDataInfo(client, 2, gmsfhm).getString("grbh");
     if (grbh.equals("")) {
+      System.out.println(gmsfhm + grxm + "--无法获取个人编号！");
       return "无法获取个人编号！";
     }
     //System.out.println(grbh);
     JSONObject jsonObject = getDataDetail(client, 2, gmsfhm, grbh, datawindow);
     String djlsh = jsonObject.getString("djlsh");
     if (djlsh.equals("")) {
+      System.out.println(gmsfhm + grxm + "--无法获取登记流水号！");
       return "无法获取登记流水号！";
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
     Element element = getSecurity(gmsfhm, month, "A");
     if (!dwmc.equals(getDWMC(element))) {
+      System.out.println(gmsfhm + grxm + "--单位名称不一致！");
       return "单位名称不一致！";
     }
     //System.out.println(dwmc);
     String syys = getSyys(client, 2, gmsfhm, grbh, djlsh);
     if (syys.equals("0")) {
+      System.out.println(gmsfhm + grxm + "--剩余补贴月数为零！");
       return "剩余补贴月数为零！";
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 2, gmsfhm, grbh, djlsh, month, month, syys);
-    if (creat.equals("[]")) {
-      return month + "的补贴已录入";
+    if (!creat.substring(0, 1).equals("[")) {
+      System.out.println(gmsfhm + grxm + "--" + month + "-" + month + "的补贴生成错误，请人工核查！原因为：" + creat);
+      return month + "-" + month + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
     //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);
@@ -545,44 +566,51 @@ public class GongGang {
       return "无法录入：已超龄！";
     }
     if (getCommerce(client, gmsfhm) || getCommerce(client, gmsfhm.substring(0, 6) + gmsfhm.substring(8, 17))) {
+      System.out.println(gmsfhm + grxm + "--存在未注销的工商信息！");
       return "存在未注销的工商信息！";
     }
     String datawindow = getTableMark(client, 2);
     if (datawindow.equals("")) {
+      System.out.println(gmsfhm + grxm + "--无法打开窗口！");
       return "无法打开窗口！";
     }
     //System.out.println(datawindow);
     String grbh = getDataInfo(client, 2, gmsfhm).getString("grbh");
     if (grbh.equals("")) {
+      System.out.println(gmsfhm + grxm + "--无法获取个人编号！");
       return "无法获取个人编号！";
     }
     //System.out.println(grbh);
     JSONObject jsonObject = getDataDetail(client, 2, gmsfhm, grbh, datawindow);
     String djlsh = jsonObject.getString("djlsh");
     if (djlsh.equals("")) {
+      System.out.println(gmsfhm + grxm + "--无法获取登记流水号！");
       return "无法获取登记流水号！";
     }
     //System.out.println(djlsh);
     String dwmc = jsonObject.getString("dwmc");
     Element element = getSecurity(gmsfhm, qsny, "A");
     if (!dwmc.equals(getDWMC(element))) {
+      System.out.println(gmsfhm + grxm + "--起始年月单位名称不一致！");
       return "起始年月单位名称不一致！";
     }
     Element element2 = getSecurity(gmsfhm, zzny, "A");
     if (!dwmc.equals(getDWMC(element2))) {
+      System.out.println(gmsfhm + grxm + "--终止年月单位名称不一致！");
       return "终止年月单位名称不一致！";
     }
     //System.out.println(dwmc);
     String syys = getSyys(client, 2, gmsfhm, grbh, djlsh);
     if (syys.equals("0")) {
+      System.out.println(gmsfhm + grxm + "--剩余补贴月数为零！");
       return "剩余补贴月数为零！";
     }
     //System.out.println(syys);
     String creat = creatSubsidy(client, 2, gmsfhm, grbh, djlsh, qsny, zzny, syys);
-    if (creat.equals("[]")) {
-      return qsny + "-" + zzny + "的补贴已录入";
+    if (!creat.substring(0, 1).equals("[")) {
+      System.out.println(gmsfhm + grxm + "--" + qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat);
+      return qsny + "-" + zzny + "的补贴生成错误，请人工核查！原因为：" + creat;
     }
-    //System.out.println(creat);
     JSONArray jsStrs = JSONArray.fromObject(creat);
     String shiyebz = "", yiliaobz = "", yanglaobz = "", gangweibz = "", sfyxyq = "", sfyxffylbt = "", sfyxffyilbt = "";
 

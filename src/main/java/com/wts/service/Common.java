@@ -1,5 +1,6 @@
 package com.wts.service;
 
+import com.wts.entity.DW;
 import com.wts.util.Kit;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -184,26 +185,54 @@ public class Common {
   }
 
   /**
-   * 获取页码总数
+   * 获取页码总数--公益岗位
    *
    * @param client    登陆后的client
    * @param tableMark 当前窗体的tableMark值
-   * @param type      2公益岗位
    * @param dwbh      单位编号
    * @param dwmc      单位名称
    * @return 页码总数
    */
-  public static String getDataTotal(CloseableHttpClient client, String tableMark, int type, String dwbh, String dwmc) throws Exception {
-    String path, method, _xmlString;
-    switch (type) {
-      case 2:  // 公益岗位
-        path = "/lemis3/lemis3MeritStation.do";
-        method = "queryMeritStaResettlement";
-        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\"" + dwbh + "\" dwmc=\"" + dwmc + "\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
-        break;
-      default:
-        return "";
-    }
+  public static String getDataTotal(CloseableHttpClient client, String tableMark, String dwbh, String dwmc) throws Exception {
+    String path = "/lemis3/lemis3MeritStation.do";
+    String method = "queryMeritStaResettlement";
+    String _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\"" + dwbh + "\" dwmc=\"" + dwmc + "\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"0\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
+
+    URI u = new URIBuilder()
+            .setScheme("http")
+            .setHost("10.153.50.108:7001")
+            .setPath(path)
+            .setParameter("method", method)
+            .setParameter("_xmlString", _xmlString)
+            .setParameter("tableMark", tableMark)
+            .setParameter("_jbjgqxfw", "undefined")
+            .setParameter("_sbjbjg", "undefined")
+            .setParameter("_dwqxfw", "undefined")
+            .build();
+    HttpPost post = new HttpPost(u);
+    CloseableHttpResponse response = client.execute(post);
+    HttpEntity entity = response.getEntity();
+    String res = EntityUtils.toString(entity, "UTF-8");
+    System.out.println(res);
+    String pageStart = "记录&nbsp;&nbsp;&nbsp;&nbsp;1/";
+    String pageEnd = "页</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    return res.substring(res.indexOf(pageStart) + 28, res.indexOf(pageEnd));
+
+  }
+
+  /**
+   * 获取页码总数--公益岗位
+   *
+   * @param client    登陆后的client
+   * @param tableMark 当前窗体的tableMark值
+   * @param dw        单位
+   * @return 页码总数
+   */
+  public static String getDataTotal(CloseableHttpClient client, String tableMark, DW dw) throws Exception {
+    String path = "/lemis3/lemis3MeritStation.do";
+    String method = "queryMeritStaResettlement";
+    String _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\"" + dw.getDwbh() + "\" dwmc=\"" + dw.getDwmc() + "\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"0\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
+
     URI u = new URIBuilder()
             .setScheme("http")
             .setHost("10.153.50.108:7001")
@@ -449,9 +478,9 @@ public class Common {
         _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s paraValue=\"" + paraValue + "\"/><s btrylb=\"01\"/></p>";
         break;
       case 2:  // 公益岗位
-        method = "";
-        containerName = "";
-        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s paraValue=\"" + paraValue + "\"/><s btrylb=\"02\"/></p>";
+        method = "queryPerMeritStationInfo";
+        containerName = "queryMeritStaInfo";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s para=\"" + paraValue + "\"/></p>";
         break;
       case 3:  // 灵活就业
         method = "queryBonusPersonInfo";
@@ -514,14 +543,73 @@ public class Common {
         _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s dwbh=\"\" dwmc=\"\" sftc=\"\" gmsfhm=\"" + gmsfhm + "\" grxm=\"" + grxm + "\" grbh=\"" + grbh + "\" sfbl=\"\" sfyba=\"\" /></p>";
         break;
       case 2:  // 公益岗位
-        path = "";
-        method = "";
-        _xmlString = "";
+        path = "/lemis3/lemis3MeritStation.do";
+        method = "queryMeritStaResettlement";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"" + gmsfhm + "\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\"\" dwmc=\"\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
         break;
       case 3:  // 灵活就业
         path = "/lemis3/lemis3SuccorFlexibleEmp.do";
         method = "queryFlexEmp";
         _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"" + gmsfhm + "\" grxm=\"" + grxm + "\" grbh=\"" + grbh + "\" spzt=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" jbjgbh=\"\" jgbh=\"\" jgmc=\"\" sfbl=\"\" jsid=\"\" jsbh=\"\" jsmc=\"\" sfyba=\"\" /></p>";
+        break;
+      default:
+        return dataDetail;
+    }
+
+    URI u = new URIBuilder()
+            .setScheme("http")
+            .setHost("10.153.50.108:7001")
+            .setPath(path)
+            .setParameter("method", method)
+            .setParameter("_xmlString", _xmlString)
+            .setParameter("tableMark", datawindow)
+            .setParameter("_jbjgqxfw", "undefined")
+            .setParameter("_sbjbjg", "undefined")
+            .setParameter("_dwqxfw", "undefined")
+            .build();
+    HttpPost post = new HttpPost(u);
+    CloseableHttpResponse response = client.execute(post);
+    HttpEntity entity = response.getEntity();
+    String res = EntityUtils.toString(entity, "UTF-8");
+    String start = "init('true','true','[";
+    String end = "]');columninput";
+    if (res.contains(start) && res.contains(end)) {
+      JSONArray jsStrs = JSONArray.fromObject(res.substring(res.indexOf(start) + 20, res.indexOf(end) + 1));
+      if (jsStrs.size() > 0) {
+        dataDetail = jsStrs.getJSONObject(0);
+      }
+    }
+    return dataDetail;
+  }
+
+  /**
+   * 获取数据详情--->直接在原窗体出现的信息
+   *
+   * @param client     登陆后的client
+   * @param type       1企业吸纳2公益岗位3灵活就业
+   * @param gmsfhm     公民身份号码
+   * @param datawindow 窗体的tableMark值
+   * @return 第一个人员的json字符串
+   */
+  public static JSONObject getDataDetail(CloseableHttpClient client, Integer type, String gmsfhm, String datawindow) throws Exception {
+    String grxm = "";
+    JSONObject dataDetail = null;
+    String path, method, _xmlString;
+    switch (type) {
+      case 1:  // 企业吸纳
+        path = "/lemis3/lemis3SuccorOrgAdmit.do";
+        method = "queryAdmitPer";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s dwbh=\"\" dwmc=\"\" sftc=\"\" gmsfhm=\"" + gmsfhm + "\" grxm=\"" + grxm + "\" grbh=\"\" sfbl=\"\" sfyba=\"\" /></p>";
+        break;
+      case 2:  // 公益岗位
+        path = "/lemis3/lemis3MeritStation.do";
+        method = "queryMeritStaResettlement";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"" + gmsfhm + "\" grxm=\"\" grbh=\"\" sfyba=\"\" dwbh=\"\" dwmc=\"\" gwmc=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" sfbl=\"\" tcqsrq=\"\" tczzrq=\"\" spzt=\"\" /></p>";
+        break;
+      case 3:  // 灵活就业
+        path = "/lemis3/lemis3SuccorFlexibleEmp.do";
+        method = "queryFlexEmp";
+        _xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p><s gmsfhm=\"" + gmsfhm + "\" grxm=\"" + grxm + "\" grbh=\"\" spzt=\"\" qsrq=\"\" zzrq=\"\" sftc=\"\" jbjgbh=\"\" jgbh=\"\" jgmc=\"\" sfbl=\"\" jsid=\"\" jsbh=\"\" jsmc=\"\" sfyba=\"\" /></p>";
         break;
       default:
         return dataDetail;
