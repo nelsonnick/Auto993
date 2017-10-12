@@ -7,9 +7,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -102,7 +100,9 @@ public class Thread extends java.lang.Thread {
           }
 
           file.createNewFile();
-          BufferedWriter out = new BufferedWriter(new FileWriter(file));
+          FileOutputStream fos = new FileOutputStream(fileName);
+          OutputStreamWriter out = new OutputStreamWriter(fos, "UTF-8");
+          //BufferedWriter out = new BufferedWriter(new FileWriter(file));
           out.write("sblb\txzbz\tqsny\tzzny\tjfjs\tzdlsh\tdwbh\tdwmc\tdwjfjs\tqrsj\r\n"); // \r\n即为换行
 
           for (Iterator it = resultset1.elementIterator(); it.hasNext(); ) {

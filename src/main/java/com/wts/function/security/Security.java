@@ -10,8 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Security {
-  private static String YangLao = "352.00";
-  private static String YiLiao = "172.00";
+  private static String YangLao = "384.00";
+  private static String YiLiao = "187.00";
+
   /**
    * 获取保险类型
    *
@@ -829,6 +830,25 @@ public class Security {
       return "单位五险";
     }
   }
+
+  /**
+   * 获取保险类型序号
+   *
+   * @param dwbh 单位编号
+   * @return 保险类型序号
+   */
+  public static String getSecurityNumber(String dwbh) {
+    if (getSecurityType(dwbh).equals("个人一险")){
+      return "1";
+    }else if(getSecurityType(dwbh).equals("个人两险")){
+      return "2";
+    }else if(getSecurityType(dwbh).equals("单位五险")){
+      return "5";
+    }else{
+      return "?";
+    }
+  }
+
 
   /**
    * @param type 1:正常缴费 2:补缴 3:补缴时间
