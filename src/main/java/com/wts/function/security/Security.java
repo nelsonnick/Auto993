@@ -10,8 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Security {
-  private static String YangLao = "384.00";
-  private static String YiLiao = "187.00";
+  public static String YangLao = "384.00";
+  public static String YiLiao = "187.00";
+  public static String Yang_Lao = "384";
+  public static String Yi_Liao = "187";
 
   /**
    * 获取保险类型

@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 public class App {
   public static void main(String[] args) throws Exception {
     System.out.println(" ");
-    System.out.println("                        欢迎使用自动993_v3.2版");
+    System.out.println("                        欢迎使用自动993_v3.3版");
     System.out.println(" ");
     String userid, passwd;
     do {
@@ -32,14 +32,15 @@ public class App {
     System.out.println(" ");
     System.out.println("1、核查工商信息--内网");
     System.out.println("2、下载工商信息--外网");
-    System.out.println("3、分析工商信息--外网");
+    System.out.println("3、分析工商信息");
     System.out.println("4、核查社保信息--内网");
     System.out.println("5、下载社保信息--内网");
-    System.out.println("6、分析社保信息--内网");
+    System.out.println("6、分析社保信息");
     System.out.println("7、自动录入灵活就业补贴（自行提供人员信息）--内网");
     System.out.println("8、自动录入灵活就业补贴（自动下载人员信息）--内网");
     System.out.println("9、自动录入公益岗位补贴（自行提供人员信息）--内网");
     System.out.println("0、自动录入公益岗位补贴（自动下载人员信息）--内网");
+    System.out.println("a、比对社保数据");
     System.out.println(" ");
     String result;
     do {
@@ -56,7 +57,8 @@ public class App {
             && !result.equals("7")
             && !result.equals("8")
             && !result.equals("9")
-            && !result.equals("0")); // 当用户输入无效的时候，反复提示要求用户输入
+            && !result.equals("0")
+            && !result.equals("a")); // 当用户输入无效的时候，反复提示要求用户输入
     switch (result) {
       case "1":
         com.wts.function.commerce.GetBy993.get();
@@ -88,8 +90,11 @@ public class App {
       case "0":
         com.wts.function.Input.inputGGBy993();
         break;
+      case "a":
+        com.wts.function.security.Check.goCheck();
+        break;
       default:
-        System.out.println("请输入数字1到数字0，并按回车键确认：");
+        System.out.println("请输入数字1到字母a，并按回车键确认：");
     }
 
   }

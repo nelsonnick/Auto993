@@ -76,7 +76,7 @@ public class Ggywzxt {
         XSSFRow newRow = sheet.createRow(total + 1);
         newRow.createCell(0).setCellValue(id);
         newRow.createCell(1).setCellValue(name);
-        newRow.createCell(2).setCellValue(month);
+        newRow.createCell(2).setCellValue(months);
         newRow.createCell(3).setCellValue("无下载信息");
         newRow.createCell(4).setCellValue("无下载信息");
         newRow.createCell(5).setCellValue("无下载信息");
@@ -139,14 +139,14 @@ public class Ggywzxt {
         }
       }
     }
-    FileOutputStream os = new FileOutputStream("c:/" + result + "_社保下载数据/结果" + months + ".xlsx");
+    FileOutputStream os = new FileOutputStream("c:/" + result + "_社保下载数据/"+result + months + ".xlsx");
     workbook.write(os);
     os.close();
 
     System.out.println("  ");
     System.out.println("  ");
     System.out.println("数据分析完成！");
-    System.out.println("请查看文件--> c:/" + result + "_社保下载数据/结果" + months + ".xlsx");
+    System.out.println("请查看文件--> c:/" + result + "_社保下载数据/"+result + months + ".xlsx");
     System.out.println("  ");
     System.out.println("按回车键退出程序...");
     while (true) {
