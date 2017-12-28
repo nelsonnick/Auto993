@@ -22,7 +22,7 @@ public class Check {
         XSSFSheet sheet_analysis = workbook_analysis.getSheetAt(0);
         int total_analysis = sheet_analysis.getLastRowNum() + 1;
         // 下载的excel
-        String down_name = result + "导出";
+        String down_name = result + "";
         XSSFWorkbook workbook_down = new XSSFWorkbook(new FileInputStream("c:\\" + result + "_社保下载数据/" + down_name + ".xlsx"));
         XSSFSheet sheet_down = workbook_down.getSheetAt(0);
         int down_analysis = sheet_down.getLastRowNum() + 1;
