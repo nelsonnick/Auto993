@@ -26,6 +26,7 @@ public class Check {
         XSSFWorkbook workbook_down = new XSSFWorkbook(new FileInputStream("c:\\" + result + "_社保下载数据/" + down_name + ".xlsx"));
         XSSFSheet sheet_down = workbook_down.getSheetAt(0);
         int down_analysis = sheet_down.getLastRowNum() + 1;
+        String sfzhm = "";
         for (int i = 1; i < total_analysis; i++) {
             String zjhm_analysis = sheet_analysis.getRow(i).getCell(0).getStringCellValue();//身份证号码
             String ryxm_analysis = sheet_analysis.getRow(i).getCell(1).getStringCellValue();//姓名
@@ -35,6 +36,11 @@ public class Check {
             String jfxz_analysis = sheet_analysis.getRow(i).getCell(5).getStringCellValue();//缴费性质
             String jfqk_analysis = sheet_analysis.getRow(i).getCell(6).getStringCellValue();//缴费情况
             String jfsj_analysis = sheet_analysis.getRow(i).getCell(7).getStringCellValue();//缴费时间
+            if (zjhm_analysis.equals(sfzhm)) {
+                continue;
+            } else {
+                sfzhm = zjhm_analysis;
+            }
             int find = 0;
             for (int j = 1; j < down_analysis; j++) {
                 String zjhm_down = sheet_down.getRow(j).getCell(0).getStringCellValue();//身份证号码
@@ -54,7 +60,7 @@ public class Check {
                         newRow.createCell(3).setCellValue("非正常缴费");
                     } else {
                         if (jfxz_analysis.equals("个人一险")) {
-                            if (!(ylbt_down.equals(Security.Yang_Lao) && yybt_down.equals("0.00"))) {
+                            if (!(ylbt_down.equals(Security.Yang_Lao) && yybt_down.equals("0"))) {
                                 int total = sheet.getLastRowNum();
                                 XSSFRow newRow = sheet.createRow(total + 1);
                                 newRow.createCell(0).setCellValue(zjhm_analysis);
@@ -104,7 +110,7 @@ public class Check {
                 newRow.createCell(0).setCellValue(zjhm_analysis);
                 newRow.createCell(1).setCellValue(ryxm_analysis);
                 newRow.createCell(2).setCellValue(jfny_analysis);
-                newRow.createCell(3).setCellValue("该人员尚未录入补贴");
+                newRow.createCell(3).setCellValue("当前月份未录入补贴，请核实");
             }
         }
 

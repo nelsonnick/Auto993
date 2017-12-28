@@ -68,10 +68,15 @@ public class Jnjgfw {
     row.createCell(14).setCellValue("住所");
     row.createCell(15).setCellValue("经营场所");
     row.createCell(16).setCellValue("经营范围");
+    String sfzhm = "";
     for (int k = 1; k < totals + 1; k++) {
       String id = sheetBefore.getRow(k).getCell(0).getStringCellValue();
       String name = sheetBefore.getRow(k).getCell(1).getStringCellValue();
-
+      if (id.equals(sfzhm)) {
+        continue;
+      } else {
+        sfzhm = id;
+      }
       String fileName = "c:/" + result + "_工商下载数据/" + id + name + ".txt";
       File f = new File(fileName);
       if (!f.exists()) {

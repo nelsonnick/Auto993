@@ -65,10 +65,15 @@ public class Ggywzxt {
     row.createCell(5).setCellValue("缴费性质");
     row.createCell(6).setCellValue("缴费情况");
     row.createCell(7).setCellValue("缴费时间");
+    String sfzhm = "";
     for (int k = 1; k < totals + 1; k++) {
       String id = sheetBefore.getRow(k).getCell(0).getStringCellValue();
       String name = sheetBefore.getRow(k).getCell(1).getStringCellValue();
-
+      if (id.equals(sfzhm)) {
+        continue;
+      } else {
+        sfzhm = id;
+      }
       String fileName = "c:/" + result + "_社保下载数据/" + id + name + ".txt";
       File f = new File(fileName);
       if (!f.exists()) {
@@ -119,7 +124,7 @@ public class Ggywzxt {
           XSSFRow newRow = sheet.createRow(total + 1);
           newRow.createCell(0).setCellValue(id);
           newRow.createCell(1).setCellValue(name);
-          newRow.createCell(2).setCellValue(month);
+          newRow.createCell(2).setCellValue(months);
           newRow.createCell(3).setCellValue(dwbh);
           newRow.createCell(4).setCellValue(dwmc);
           newRow.createCell(5).setCellValue(getSecurityType(dwbh));
@@ -130,7 +135,7 @@ public class Ggywzxt {
           XSSFRow newRow = sheet.createRow(total + 1);
           newRow.createCell(0).setCellValue(id);
           newRow.createCell(1).setCellValue(name);
-          newRow.createCell(2).setCellValue(month);
+          newRow.createCell(2).setCellValue(months);
           newRow.createCell(3).setCellValue("无养老缴费记录");
           newRow.createCell(4).setCellValue("无养老缴费记录");
           newRow.createCell(5).setCellValue("无养老缴费记录");

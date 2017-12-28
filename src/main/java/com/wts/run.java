@@ -29,10 +29,15 @@ public class run {
     row.createCell(5).setCellValue("缴费性质");
     row.createCell(6).setCellValue("缴费情况");
     row.createCell(7).setCellValue("缴费时间");
+    String sfzhm = "";
     for (int k = 1; k < totals + 1; k++) {
       String id = sheetBefore.getRow(k).getCell(0).getStringCellValue();
       String name = sheetBefore.getRow(k).getCell(1).getStringCellValue();
-
+      if (id.equals(sfzhm)) {
+        continue;
+      } else {
+        sfzhm = id;
+      }
       String fileName = "c:/" + result + "_社保下载数据/" + id + name + ".txt";
       File f = new File(fileName);
       if (!f.exists()) {
@@ -83,7 +88,7 @@ public class run {
           XSSFRow newRow = sheet.createRow(total + 1);
           newRow.createCell(0).setCellValue(id);
           newRow.createCell(1).setCellValue(name);
-          newRow.createCell(2).setCellValue(month);
+          newRow.createCell(2).setCellValue(months);
           newRow.createCell(3).setCellValue(dwbh);
           newRow.createCell(4).setCellValue(dwmc);
           newRow.createCell(5).setCellValue(getSecurityType(dwbh));
@@ -94,7 +99,7 @@ public class run {
           XSSFRow newRow = sheet.createRow(total + 1);
           newRow.createCell(0).setCellValue(id);
           newRow.createCell(1).setCellValue(name);
-          newRow.createCell(2).setCellValue(month);
+          newRow.createCell(2).setCellValue(months);
           newRow.createCell(3).setCellValue("无养老缴费记录");
           newRow.createCell(4).setCellValue("无养老缴费记录");
           newRow.createCell(5).setCellValue("无养老缴费记录");
@@ -106,20 +111,19 @@ public class run {
     FileOutputStream os = new FileOutputStream("c:/" + result + "_社保下载数据/"+result + months + ".xlsx");
     workbook.write(os);
     os.close();
-
-    System.out.println("  ");
-    System.out.println("  ");
     System.out.println("请查看文件--> c:/" + result + "_社保下载数据/"+result + months + ".xlsx");
   }
   public static void main(String[] args) throws Exception {
 
-    String result = "道德街";
-    go(result,"201710");
-    go(result,"201711");
-    go(result,"201712");
-    com.wts.function.security.Check.checkSecury(result,"201710");
-    com.wts.function.security.Check.checkSecury(result,"201711");
-    com.wts.function.security.Check.checkSecury(result,"201712");
+    String[] locations = new String[]{"西市场", "五里沟", "道德街", "营市街", "青年公园", "中大", "振兴街", "南辛庄", "段北", "匡山", "张庄", "美里湖", "腊山", "吴家堡", "玉清湖", "兴福"};
+    String[] months = new String[]{"201710", "201711", "201712"};
+    for(String location : locations ){
+      for(String month : months ) {
+        go(location, month);
+        com.wts.function.security.Check.checkSecury(location, month);
+      }
+    }
+
 //    com.wts.function.commerce.Jnjgfw.analysis();
 //    com.wts.function.commerce.Jnjgfw.download();
 //    XSSFWorkbook workbookBefore = new XSSFWorkbook(new FileInputStream("c:\\" + result + ".xlsx"));
