@@ -58,6 +58,7 @@ public class Check {
                         newRow.createCell(1).setCellValue(ryxm_analysis);
                         newRow.createCell(2).setCellValue(jfny_analysis);
                         newRow.createCell(3).setCellValue("非正常缴费");
+                        newRow.createCell(4).setCellValue(jfsj_analysis);
                     } else {
                         if (jfxz_analysis.equals("个人一险")) {
                             if (!(ylbt_down.equals(Security.Yang_Lao) && yybt_down.equals("0"))) {

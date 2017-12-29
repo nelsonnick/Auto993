@@ -115,7 +115,7 @@ public class run {
   }
   public static void main(String[] args) throws Exception {
 
-    String[] locations = new String[]{"西市场", "五里沟", "道德街", "营市街", "青年公园", "中大", "振兴街", "南辛庄", "段北", "匡山", "张庄", "美里湖", "腊山", "吴家堡", "玉清湖", "兴福"};
+    String[] locations = new String[]{"西市场", "五里沟", "道德街",  "青年公园", "中大", "振兴街", "南辛庄", "段北", "匡山", "张庄", "美里湖", "腊山", "吴家堡", "玉清湖", "兴福"};
     String[] months = new String[]{"201710", "201711", "201712"};
     for(String location : locations ){
       for(String month : months ) {
