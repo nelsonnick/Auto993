@@ -88,7 +88,8 @@ public class Ggywzxt {
         newRow.createCell(6).setCellValue("无下载信息");
         newRow.createCell(7).setCellValue("无下载信息");
       } else {
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+//        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        BufferedReader reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"UTF-8"));
         String lineTxt = null;
 
         String xzbz = "", qsny = "", zzny = "", jfjs = "", zdlsh = "", dwbh = "", dwmc = "", dwjfjs = "", qrsj = "", aa = "", bb = "";
